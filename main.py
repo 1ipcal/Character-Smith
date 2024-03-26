@@ -18,10 +18,21 @@ class Character:
         character_name_label.pack()
         character_name_entry.pack()
         character_name_entry.insert(0, 'Hero')
-        character_name_entry.config(state='disabled')
+        # character_name_entry.config(state='disabled')
+        character_name_button = Button(self.root, text='Lock', command=lambda: self.lock_button(character_name_entry, character_name_button))
+        character_name_button.pack()
         
         character_class_label.pack()
         character_class_entry.pack()
+
+    def lock_button(self, entry, button):
+        # if button is enabled, disabled it and recess it. otherwise do the opposite
+        if entry.cget('state') == 'normal':
+            entry.config(state='disabled')
+            button.config(relief=SUNKEN)
+        else:
+            entry.config(state='normal')
+            button.config(relief=RAISED)
 
 if __name__ == '__main__':
     root = Tk()
