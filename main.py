@@ -14,11 +14,11 @@ class Character:
         print(race_options)
 
         # create main frame
-        frame = Frame(self.root)
-        frame.pack()
+        main_frame = Frame(self.root)
+        main_frame.pack()
         
         # create frame for character info
-        character_info_frame = LabelFrame(frame, text="Character Information")
+        character_info_frame = LabelFrame(main_frame, text="Character Information")
         character_info_frame.grid(row=0, column=0, columnspan=3)
 
         character_name_label = Label(character_info_frame, text='Name')
@@ -52,7 +52,7 @@ class Character:
         character_level_entry.grid(row=1, column=4)
 
         # create frame for attributes
-        attributes_frame = LabelFrame(frame, text='Attributes')
+        attributes_frame = LabelFrame(main_frame, text='Attributes')
         attributes_frame.grid(row=1, column=0, columnspan=3)
         
         strength_box_label = Label(attributes_frame, text='Strength')
@@ -98,23 +98,96 @@ class Character:
         charisma_modifier.grid(row=2, column=5)
         
         # create health frame
-        health_frame = Frame(frame)
+        health_frame = Frame(main_frame)
         health_frame.grid(row=2, column=0)
         
+        # Hitpoints Subframe
         hitpoints_frame = LabelFrame(health_frame, text='Hit Points')
-        hitpoints_frame.grid(row=0, column=0)
+        hitpoints_frame.grid(row=0, column=0, sticky='ew')
         
         max_hp_label = Label(hitpoints_frame, text='Max HP')
-        max_hp_text = Label(hitpoints_frame, text='0')
+        max_hp_text = Entry(hitpoints_frame, width=10)
+        max_hp_text.insert(0, '0')  # Default value
         current_hp_label = Label(hitpoints_frame, text='Current HP')
-        current_hp_text = Label(hitpoints_frame, text='0')
+        current_hp_text = Entry(hitpoints_frame, width=20)
+        current_hp_text.insert(0, '0')  # Default value
         max_hp_label.grid(row=0, column=0)
         max_hp_text.grid(row=1, column=0)
-        current_hp_label.grid(row=0, column=1)
-        current_hp_text.grid(row=1, column=1)
+        current_hp_label.grid(row=0, column=1, columnspan=2)
+        current_hp_text.grid(row=1, column=1, columnspan=2)
 
+        # Armor Class, Speed, Initiative Subframe
+        armour_class_label = Label(hitpoints_frame, text='Armor Class')
+        armour_class_text = Entry(hitpoints_frame, width=10)
+        armour_class_text.insert(0, '0')  # Default value
+        initiative_label = Label(hitpoints_frame, text='Initiative')
+        initiative_text = Entry(hitpoints_frame, width=10)
+        initiative_text.insert(0, '0')  # Default value
+        speed_label = Label(hitpoints_frame, text='Speed')
+        speed_text = Entry(hitpoints_frame, width=10)
+        speed_text.insert(0, '0')  # Default value
+        armour_class_label.grid(row=2, column=0)
+        armour_class_text.grid(row=3, column=0)
+        initiative_label.grid(row=2, column=1)
+        initiative_text.grid(row=3, column=1)
+        speed_label.grid(row=2, column=2)
+        speed_text.grid(row=3, column=2)
+
+        # Saving Throws Subframe
+        saving_throws_subframe = LabelFrame(health_frame, text='Saving Throws')
+        saving_throws_subframe.grid(row=1, column=0, sticky='ew')
+
+        saving_throws_strength = Checkbutton(saving_throws_subframe, text='Strength')
+        saving_throws_dexterity = Checkbutton(saving_throws_subframe, text='Dexterity')
+        saving_throws_constitution = Checkbutton(saving_throws_subframe, text='Constitution')
+        saving_throws_intelligence = Checkbutton(saving_throws_subframe, text='Intelligence')
+        saving_throws_wisdom = Checkbutton(saving_throws_subframe, text='Wisdom')
+        saving_throws_charisma = Checkbutton(saving_throws_subframe, text='Charisma')
+        saving_throws_strength.grid(row=0, column=0, sticky='w')
+        saving_throws_dexterity.grid(row=1, column=0, sticky='w')
+        saving_throws_constitution.grid(row=2, column=0, sticky='w')
+        saving_throws_intelligence.grid(row=3, column=0, sticky='w')
+        saving_throws_wisdom.grid(row=4, column=0, sticky='w')
+        saving_throws_charisma.grid(row=5, column=0, sticky='w')
+
+        # Hit Dice Subframe
+        hit_dice_subframe = LabelFrame(health_frame, text='Hit Dice')
+        hit_dice_subframe.grid(row=2, column=0, sticky='ew')
+
+        hit_dice_label = Label(hit_dice_subframe, text='Hit Dice')
+        hit_dice_text = Entry(hit_dice_subframe, width=16)
+        hit_dice_text.insert(0, '0')  # Default value
+        hit_dice_total_label = Label(hit_dice_subframe, text='Total')
+        hit_dice_total_text = Entry(hit_dice_subframe, width=16)
+        hit_dice_total_text.insert(0, '0')  # Default value
+        hit_dice_label.grid(row=0, column=0)
+        hit_dice_text.grid(row=1, column=0)
+        hit_dice_total_label.grid(row=0, column=1)
+        hit_dice_total_text.grid(row=1, column=1)
+
+        # Death Saves Subframe
+        death_saves_subframe = LabelFrame(health_frame, text='Death Saves')
+        death_saves_subframe.grid(row=2, column=0, sticky='ew')
+
+        success_label = Label(death_saves_subframe, text='Successes')
+        failure_label = Label(death_saves_subframe, text='Failures')
+        success_label.grid(row=0, column=0, sticky='w')
+        failure_label.grid(row=1, column=0, sticky='w')
+
+        successes_checkboxes = []  # Variable to store the success checkboxes
+        for i in range(3):
+            success = Checkbutton(death_saves_subframe)
+            success.grid(row=0, column=i+1)
+            successes_checkboxes.append(success)
+
+        failure_checkboxes = [] # Variable to store the failures checkboxes
+        for i in range(3):
+            failure = Checkbutton(death_saves_subframe)
+            failure.grid(row=1, column=i+1)
+            failure_checkboxes.append(failure)
+        
         # create weapon frame
-        attack_frame = LabelFrame(frame, text='Attacks & Spellcasting')
+        attack_frame = LabelFrame(main_frame, text='Attacks & Spellcasting')
         attack_frame.grid(row=2, column=1)
         attack_box = Text(attack_frame, width=40, height=10)
         abilities_box = Text(attack_frame, width=40, height=10)
@@ -122,7 +195,7 @@ class Character:
         abilities_box.grid(row=1, column=0)
 
         # create skills frame
-        skills_frame = LabelFrame(frame, text='Skills')
+        skills_frame = LabelFrame(main_frame, text='Skills')
         skills_frame.grid(row=2, column=2)
 
         acrobatics_check = Checkbutton(skills_frame, text='Acrobatics')
@@ -177,7 +250,7 @@ class Character:
             widget.grid_configure(padx=3)
         
         for widget in attributes_frame.winfo_children():
-            widget.grid_configure(padx=3)
+            widget.grid_configure(padx=3)    
 
     def lock_button(self, entry, button):
         # if button is enabled, disabled it and recess it. otherwise do the opposite
