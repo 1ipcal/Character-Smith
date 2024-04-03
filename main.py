@@ -4,11 +4,14 @@ from tkinter import ttk
 class Character:
     def __init__(self, root) -> None:
         self.root = root
-        option = StringVar(root)
+        character_class_option = StringVar(root)
+        character_race_option = StringVar(root)
         class_file = open('ASSETS\\CLASSES.txt', 'r')
-        class_options = [line for line in class_file.readlines()]
+        class_options = [line.strip() for line in class_file.readlines()]
         race_file = open('ASSETS\\RACES.txt', 'r')
-        race_options = [line for line in race_file.readlines()]
+        race_options = [line.strip() for line in race_file.readlines()]
+        print(class_options)
+        print(race_options)
 
         # create main frame
         frame = Frame(self.root)
@@ -22,13 +25,15 @@ class Character:
         character_name_entry = Entry(character_info_frame)
 
         character_class_label = Label(character_info_frame, text='Class')
-        character_class_menu = OptionMenu(character_info_frame, option, *class_options)
+        character_class_menu = OptionMenu(character_info_frame, character_class_option, *class_options)
+        character_class_menu.config(width=10)
 
         character_level_label = Label(character_info_frame, text='Level')
         character_level_entry = Entry(character_info_frame, width=3)
 
         character_race_label = Label(character_info_frame, text='Race')
-        character_race_entry = Entry(character_info_frame)
+        character_race_menu = OptionMenu(character_info_frame, character_race_option, *race_options)
+        character_race_menu.config(width=10)
 
         character_name_label.grid(row=0, column=0, sticky=W)
         character_name_entry.grid(row=1, column=0)
@@ -41,7 +46,7 @@ class Character:
         character_class_menu.grid(row=1, column=2)
 
         character_race_label.grid(row=0, column=3, sticky=W)
-        character_race_entry.grid(row=1, column=3)
+        character_race_menu.grid(row=1, column=3)
 
         character_level_label.grid(row=0, column=4)
         character_level_entry.grid(row=1, column=4)
