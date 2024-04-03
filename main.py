@@ -5,9 +5,9 @@ class Character:
     def __init__(self, root) -> None:
         self.root = root
         option = StringVar(root)
-        class_file = open('ASSETS\CLASSES.txt', 'r')
+        class_file = open('ASSETS\\CLASSES.txt', 'r')
         class_options = [line for line in class_file.readlines()]
-        race_file = open('ASSETS\RACES.txt', 'r')
+        race_file = open('ASSETS\\RACES.txt', 'r')
         race_options = [line for line in race_file.readlines()]
 
         # create main frame
@@ -52,46 +52,69 @@ class Character:
         
         strength_box_label = Label(attributes_frame, text='Strength')
         strength_box = Entry(attributes_frame, width=5)
+        strength_modifier = Label(attributes_frame, text='+0')
         strength_box_label.grid(row=0, column=0)
         strength_box.grid(row=1, column=0)
+        strength_modifier.grid(row=2, column=0)
 
         dexterity_box_label = Label(attributes_frame, text='Dexterity')
         dexterity_box = Entry(attributes_frame, width=5)
+        dexterity_modifier = Label(attributes_frame, text='+0')
         dexterity_box_label.grid(row=0, column=1)
         dexterity_box.grid(row=1, column=1)
+        dexterity_modifier.grid(row=2, column=1)
 
         constitution_box_label = Label(attributes_frame, text='Constitution')
         constitution_box = Entry(attributes_frame, width=5)
+        constitution_modifier = Label(attributes_frame, text='+0')
         constitution_box_label.grid(row=0, column=2)
         constitution_box.grid(row=1, column=2)
+        constitution_modifier.grid(row=2, column=2)
 
         intelligence_box_label = Label(attributes_frame, text='Intelligence')
         intelligence_box = Entry(attributes_frame, width=5)
+        intelligence_modifier = Label(attributes_frame, text='+0')
         intelligence_box_label.grid(row=0, column=3)
         intelligence_box.grid(row=1, column=3)
+        intelligence_modifier.grid(row=2, column=3)
 
         wisdom_box_label = Label(attributes_frame, text='Wisdom')
         wisdom_box = Entry(attributes_frame, width=5)
+        wisdom_modifier = Label(attributes_frame, text='+0')
         wisdom_box_label.grid(row=0, column=4)
         wisdom_box.grid(row=1, column=4)
+        wisdom_modifier.grid(row=2, column=4)
 
         charisma_box_label = Label(attributes_frame, text='Charisma')
         charisma_box = Entry(attributes_frame, width=5)
+        charisma_modifier = Label(attributes_frame, text='+0')
         charisma_box_label.grid(row=0, column=5)
         charisma_box.grid(row=1, column=5)
+        charisma_modifier.grid(row=2, column=5)
         
         # create health frame
         health_frame = Frame(frame)
         health_frame.grid(row=2, column=0)
         
-        hitpoints_label = Label(health_frame, text='Hit Points')
-        hitpoints_label.grid(row=0, column=0)
+        hitpoints_frame = LabelFrame(health_frame, text='Hit Points')
+        hitpoints_frame.grid(row=0, column=0)
+        
+        max_hp_label = Label(hitpoints_frame, text='Max HP')
+        max_hp_text = Label(hitpoints_frame, text='0')
+        current_hp_label = Label(hitpoints_frame, text='Current HP')
+        current_hp_text = Label(hitpoints_frame, text='0')
+        max_hp_label.grid(row=0, column=0)
+        max_hp_text.grid(row=1, column=0)
+        current_hp_label.grid(row=0, column=1)
+        current_hp_text.grid(row=1, column=1)
 
         # create weapon frame
         attack_frame = LabelFrame(frame, text='Attacks & Spellcasting')
         attack_frame.grid(row=2, column=1)
-        attack_box = Text(attack_frame, width=50)
+        attack_box = Text(attack_frame, width=40, height=10)
+        abilities_box = Text(attack_frame, width=40, height=10)
         attack_box.grid(row=0, column=0)
+        abilities_box.grid(row=1, column=0)
 
         # create skills frame
         skills_frame = LabelFrame(frame, text='Skills')
@@ -133,6 +156,17 @@ class Character:
         stealth_check.grid(row=16, column=0, sticky='w')
         survival_check = Checkbutton(skills_frame, text='Survival')
         survival_check.grid(row=17, column=0, sticky='w')
+        
+        # create proficiencies frame
+        proficiencies_frame = LabelFrame(skills_frame, text='Proficiencies')
+        proficiencies_frame.grid(row=18, column=0)
+        # scrollbar
+        prof_xscroll = Scrollbar(proficiencies_frame, orient='horizontal')
+        prof_xscroll.grid(row=1, column=0, sticky='nsew')
+        proficiencies_box = Text(proficiencies_frame, width=30, height=10, xscrollcommand=prof_xscroll.set)
+        prof_xscroll.config(command=proficiencies_box.xview)
+        proficiencies_box.config(undo=True, wrap=NONE)
+        proficiencies_box.grid(row=0, column=0)
 
         for widget in character_info_frame.winfo_children():
             widget.grid_configure(padx=3)
