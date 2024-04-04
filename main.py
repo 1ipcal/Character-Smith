@@ -1,10 +1,13 @@
 from tkinter import *
 from tkinter import ttk
 from random import randint
+import json
 
 class Character:
     def __init__(self, root) -> None:
         self.root = root
+        self.character_model = Character_Model()
+
         character_class_option = StringVar(root)
         character_race_option = StringVar(root)
         class_file = open('ASSETS\\CLASSES.txt', 'r')
@@ -314,6 +317,80 @@ class Character:
                 
                 # also need to run the modifier
 
+class Character_Model:
+    def __init__(self) -> None:
+        self.character_name = ""
+        self.character_class = ""
+        self.race = ""
+        self.level = 0
+        self.attributes = {
+            'strength': 0,
+            'dexterity': 0,
+            'constitution': 0,
+            'intelligence': 0,
+            'wisdom': 0,
+            'charisma': 0
+        }
+        self.hitpoints = {
+            'max': 0,
+            'current': 0
+        }
+        self.armor_class = 0
+        self.initiative = 0
+        self.speed = 0
+        self.saving_throws = {
+            'strength': False,
+            'dexterity': False,
+            'constitution': False,
+            'intelligence': False,
+            'wisdom': False,
+            'charisma': False
+        }
+        self.hit_dice = {
+            'total': 0,
+            'current': 0
+        }
+        self.death_saves = {
+            'successes': 0,
+            'failures': 0
+        }
+        # Weapon attacks will be in a form of a list of dictionaries
+        # Example: [{'name': 'Sword', 'bonus_to_hit': 5, 'damage': '1d6 + 3'}, ...]
+        self.weapon_attacks = []
+        self.abilities = []
+        self.skills = {
+            'acrobatics': False,
+            'animal_handling': False,
+            'arcana': False,
+            'athletics': False,
+            'deception': False,
+            'history': False,
+            'insight': False,
+            'intimidation': False,
+            'investigation': False,
+            'medicine': False,
+            'nature': False,
+            'perception': False,
+            'performance': False,
+            'persuation': False,
+            'religion': False,
+            'sleight_of_hand': False,
+            'stealth': False,
+            'survival': False
+        }
+        self.other_proficiencies = []
+
+    # Saving Data (instance attributes) to a JSON file. 
+    # This will be used to save the Character Model
+    def to_json(self):
+        return json.dumps(self.__dict__, indent=4)
+
+    @classmethod
+    def from_json(cls, json_str):
+        instance = cls()
+        instance.__dict__ = json.loads(json_str)
+        return instance
+
 if __name__ == '__main__':
     root = Tk()
     root.title('Character Smith')
@@ -321,6 +398,17 @@ if __name__ == '__main__':
     # root.bind_all("<Button-1>", lambda event: event.widget.focus_set())
 
     character = Character(root)
+
+    # JSON FILE TEST
+    # with open('character.json', 'w') as f:
+    #     f.write(character.character_model.to_json())
+    # 
+    # with open('character.json', 'r') as f:
+    #     json_str = f.read()
+    #     loaded_character = character.character_model.from_json(json_str)
+    #     character.character_model = loaded_character
+    # 
+    # print("Level: " + str(character.character_model.level))
 
     print('Running...')
 
