@@ -192,6 +192,10 @@ class Character:
             failure.grid(row=1, column=i+1)
             failure_checkboxes.append(failure)
 
+        # create spell button that will open a new window
+        spell_button = Button(health_frame, text='Spells', bg='azure2', command=lambda: self.open_spell_window())
+        spell_button.grid(row=4, column=0, sticky='ew')
+
         # End of Health Frame
         
         # Create Weapon Attacks & Abilities Subframe
@@ -210,10 +214,14 @@ class Character:
 
         # Create table rows
         table_rows = 5
+        entries = []  # This list will hold all the entry fields
         for i in range(1, table_rows + 1):
+            row_entries = []  # This list will hold the entries for a single row
             for j in range(3):
                 entry = Entry(weapon_attacks_subframe, width=17)
                 entry.grid(row=i, column=j)
+                row_entries.append(entry)
+            entries.append(row_entries)
 
         abilities_box = Text(weapon_attacks_subframe, width=40, height=20)
         abilities_box.grid(row=table_rows + 1, column=0, columnspan=3)
@@ -316,6 +324,17 @@ class Character:
                 attribute.config(text=str(total))
                 
                 # also need to run the modifier
+
+    def open_spell_window(self):
+        add_spell_window = Toplevel(self.root)
+        add_spell_window.title('Add Spell')
+        add_spell_window.geometry('400x400')
+
+        spell_name_label = Label(add_spell_window, text='Spell Name')
+        spell_name_entry = Entry(add_spell_window)
+        spell_name_label.grid(row=0, column=0)
+        spell_name_entry.grid(row=0, column=1)
+        
 
 class Character_Model:
     def __init__(self) -> None:
