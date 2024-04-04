@@ -1,5 +1,6 @@
 from tkinter import *
 from tkinter import ttk
+from random import randint
 
 class Character:
     def __init__(self, root) -> None:
@@ -56,47 +57,51 @@ class Character:
         attributes_frame.grid(row=1, column=0, columnspan=3)
         
         strength_box_label = Label(attributes_frame, text='Strength')
-        strength_box = Entry(attributes_frame, width=5)
+        self.strength_box = Entry(attributes_frame, width=5)
         strength_modifier = Label(attributes_frame, text='+0')
         strength_box_label.grid(row=0, column=0)
-        strength_box.grid(row=1, column=0)
+        self.strength_box.grid(row=1, column=0)
         strength_modifier.grid(row=2, column=0)
 
         dexterity_box_label = Label(attributes_frame, text='Dexterity')
-        dexterity_box = Entry(attributes_frame, width=5)
+        self.dexterity_box = Entry(attributes_frame, width=5)
         dexterity_modifier = Label(attributes_frame, text='+0')
         dexterity_box_label.grid(row=0, column=1)
-        dexterity_box.grid(row=1, column=1)
+        self.dexterity_box.grid(row=1, column=1)
         dexterity_modifier.grid(row=2, column=1)
 
         constitution_box_label = Label(attributes_frame, text='Constitution')
-        constitution_box = Entry(attributes_frame, width=5)
+        self.constitution_box = Entry(attributes_frame, width=5)
         constitution_modifier = Label(attributes_frame, text='+0')
         constitution_box_label.grid(row=0, column=2)
-        constitution_box.grid(row=1, column=2)
+        self.constitution_box.grid(row=1, column=2)
         constitution_modifier.grid(row=2, column=2)
 
         intelligence_box_label = Label(attributes_frame, text='Intelligence')
-        intelligence_box = Entry(attributes_frame, width=5)
+        self.intelligence_box = Entry(attributes_frame, width=5)
         intelligence_modifier = Label(attributes_frame, text='+0')
         intelligence_box_label.grid(row=0, column=3)
-        intelligence_box.grid(row=1, column=3)
+        self.intelligence_box.grid(row=1, column=3)
         intelligence_modifier.grid(row=2, column=3)
 
         wisdom_box_label = Label(attributes_frame, text='Wisdom')
-        wisdom_box = Entry(attributes_frame, width=5)
+        self.wisdom_box = Entry(attributes_frame, width=5)
         wisdom_modifier = Label(attributes_frame, text='+0')
         wisdom_box_label.grid(row=0, column=4)
-        wisdom_box.grid(row=1, column=4)
+        self.wisdom_box.grid(row=1, column=4)
         wisdom_modifier.grid(row=2, column=4)
 
         charisma_box_label = Label(attributes_frame, text='Charisma')
-        charisma_box = Entry(attributes_frame, width=5)
+        self.charisma_box = Entry(attributes_frame, width=5)
         charisma_modifier = Label(attributes_frame, text='+0')
         charisma_box_label.grid(row=0, column=5)
-        charisma_box.grid(row=1, column=5)
+        self.charisma_box.grid(row=1, column=5)
         charisma_modifier.grid(row=2, column=5)
         
+        # create list of attributes for use in generate values
+        self.attributes_list = [self.strength_box, self.dexterity_box, self.constitution_box,
+                                self.intelligence_box, self.wisdom_box, self.charisma_box]
+
         # create health frame
         health_frame = Frame(main_frame)
         health_frame.grid(row=2, column=0)
@@ -270,6 +275,26 @@ class Character:
         if modifier >= 0:
             return '+' + str(modifier)
         return str(modifier)
+    
+    def generate_attributes(self):
+        # run 6 times, one for each box. skip box if it is disabled
+        for attribute in self.attributes_list:
+            if attribute.cget('state') == 'normal':
+                # roll 4 dice, save 3 highest
+                temp_dice = []
+                for i in range(4):
+                    temp_dice.append(randint(1, 6))
+                # remove the lowest value
+                temp_dice.remove(min(temp_dice))
+                
+                # get total sum of dice
+                total = sum(temp_dice)
+                # we need to do a check for the race so that it gets added properly
+                # possibly have a variable for each attribute so that we can add it
+                # to the race modifier and then update the total
+                attribute.config(text=str(total))
+                
+                # also need to run the modifier
 
 if __name__ == '__main__':
     root = Tk()
