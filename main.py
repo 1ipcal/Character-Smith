@@ -11,8 +11,6 @@ class Character:
         class_options = [line.strip() for line in class_file.readlines()]
         race_file = open('ASSETS\\RACES.txt', 'r')
         race_options = [line.strip() for line in race_file.readlines()]
-        print(class_options)
-        print(race_options)
 
         # create main frame
         main_frame = Frame(self.root)
@@ -104,7 +102,7 @@ class Character:
 
         # create health frame
         health_frame = Frame(main_frame)
-        health_frame.grid(row=2, column=0)
+        health_frame.grid(row=2, column=0, sticky='n')
         
         # Hitpoints Subframe
         hitpoints_frame = LabelFrame(health_frame, text='Hit Points')
@@ -172,7 +170,7 @@ class Character:
 
         # Death Saves Subframe
         death_saves_subframe = LabelFrame(health_frame, text='Death Saves')
-        death_saves_subframe.grid(row=2, column=0, sticky='ew')
+        death_saves_subframe.grid(row=3, column=0, sticky='ew')
 
         success_label = Label(death_saves_subframe, text='Successes')
         failure_label = Label(death_saves_subframe, text='Failures')
@@ -190,14 +188,34 @@ class Character:
             failure = Checkbutton(death_saves_subframe)
             failure.grid(row=1, column=i+1)
             failure_checkboxes.append(failure)
+
+        # End of Health Frame
         
-        # create weapon frame
-        attack_frame = LabelFrame(main_frame, text='Attacks & Spellcasting')
-        attack_frame.grid(row=2, column=1)
-        attack_box = Text(attack_frame, width=40, height=10)
-        abilities_box = Text(attack_frame, width=40, height=10)
-        attack_box.grid(row=0, column=0)
-        abilities_box.grid(row=1, column=0)
+        # Create Weapon Attacks & Abilities Subframe
+        weapon_attacks_subframe = LabelFrame(main_frame, text='Weapon Attacks & Abilities')
+        weapon_attacks_subframe.grid(row=2, column=1, sticky='n')
+
+        # Create weapon frame
+        attack_frame = LabelFrame(weapon_attacks_subframe, text='Weapon Attacks & Abilities')
+        attack_frame.grid(row=0, column=0)
+
+        # Create table headers
+        headers = ["Name", "Bonus to Hit", "Damage"]
+        for i, header in enumerate(headers):
+            label = Label(weapon_attacks_subframe, text=header)
+            label.grid(row=0, column=i)
+
+        # Create table rows
+        table_rows = 5
+        for i in range(1, table_rows + 1):
+            for j in range(3):
+                entry = Entry(weapon_attacks_subframe, width=17)
+                entry.grid(row=i, column=j)
+
+        abilities_box = Text(weapon_attacks_subframe, width=40, height=20)
+        abilities_box.grid(row=table_rows + 1, column=0, columnspan=3)
+
+        # End of Weapon Attacks & Abilities Subframe
 
         # create skills frame
         skills_frame = LabelFrame(main_frame, text='Skills')
@@ -241,7 +259,7 @@ class Character:
         survival_check.grid(row=17, column=0, sticky='w')
         
         # create proficiencies frame
-        proficiencies_frame = LabelFrame(skills_frame, text='Proficiencies')
+        proficiencies_frame = LabelFrame(skills_frame, text='Other Proficiencies')
         proficiencies_frame.grid(row=18, column=0)
         # scrollbar
         prof_xscroll = Scrollbar(proficiencies_frame, orient='horizontal')
@@ -303,5 +321,7 @@ if __name__ == '__main__':
     # root.bind_all("<Button-1>", lambda event: event.widget.focus_set())
 
     character = Character(root)
+
+    print('Running...')
 
     root.mainloop()
