@@ -503,15 +503,46 @@ class Character:
                 
                 # also need to run the modifier
 
+    def save_and_close_spells(self, window, textbox):
+        # Save the contents of the text box to the character model
+        self.character_model.spells = textbox.get("1.0", 'end-1c')
+
+        # Close the window
+        window.destroy()
+
     def open_spell_window(self):
         add_spell_window = Toplevel(self.root)
-        add_spell_window.title('Add Spell')
+        add_spell_window.title('Manage Spells')
         add_spell_window.geometry('400x400')
 
         spell_name_label = Label(add_spell_window, text='Spell Name')
-        spell_name_textbox = Text(add_spell_window, height=20, width=40)
         spell_name_label.grid(row=0, column=0)
-        spell_name_textbox.grid(row=1, column=0)
+
+        # Create a frame to hold the text box and scrollbars
+        frame = Frame(add_spell_window)
+        frame.grid(row=1, column=0)
+
+        # Create the vertical scrollbar
+        y_scrollbar = Scrollbar(frame)
+        y_scrollbar.pack(side=RIGHT, fill=Y)
+
+        # Create the horizontal scrollbar
+        x_scrollbar = Scrollbar(frame, orient=HORIZONTAL)
+        x_scrollbar.pack(side=BOTTOM, fill=X)
+
+        # Create the text box with scrollbars
+        spell_name_textbox = Text(frame, height=20, width=40, yscrollcommand=y_scrollbar.set, xscrollcommand=x_scrollbar.set)
+        spell_name_textbox.pack(side=LEFT, fill=BOTH, expand=True)
+
+        # Configure the scrollbars to move with the text box
+        y_scrollbar.config(command=spell_name_textbox.yview)
+        x_scrollbar.config(command=spell_name_textbox.xview)
+
+        # Load the spells from the character model into the text box
+        spell_name_textbox.insert(END, self.character_model.spells)
+
+        # Bind the WM_DELETE_WINDOW protocol to a method that saves the contents of the text box to the character model
+        add_spell_window.protocol("WM_DELETE_WINDOW", lambda: self.save_and_close_spells(add_spell_window, spell_name_textbox))
 
     def save_to_model(self, character_model) -> None:
         """
