@@ -17,7 +17,7 @@ class Character:
         class_options = [line.strip() for line in class_file.readlines()]
         race_file = open('./ASSETS/RACES.txt', 'r')
         race_options = [line.strip() for line in race_file.readlines()]
-        race_default_list = self.parse_race_default_csv('./ASSETS/RACES_DEFAULT.csv')
+        self.race_default_dict = self.parse_race_default_csv('./ASSETS/RACES_DEFAULT.csv')
         
         all_not_num_entry = []
 
@@ -54,7 +54,7 @@ class Character:
         character_level_entry = Entry(character_info_frame, width=3)
 
         character_race_label = Label(character_info_frame, text='Race')
-        character_race_menu = OptionMenu(character_info_frame, character_race_option, *race_options)
+        character_race_menu = OptionMenu(character_info_frame, character_race_option, *race_options, command=self.load_default_race_values)
         character_race_menu.config(width=10)
 
         character_name_label.grid(row=0, column=0, sticky=W)
@@ -78,46 +78,58 @@ class Character:
         attributes_frame.grid(row=1, column=0, columnspan=3)
         
         strength_box_label = Label(attributes_frame, text='Strength')
-        self.strength_box = Entry(attributes_frame, width=5)
-        strength_modifier = Label(attributes_frame, text='+0')
+        self.strength_box = Entry(attributes_frame, width=5, 
+                                  validatecommand=lambda: self.validate_attribute(self.strength_box, self.strength_modifier),
+                                  validate='focusout')
+        self.strength_modifier = Label(attributes_frame, text='+0')
         strength_box_label.grid(row=0, column=0)
         self.strength_box.grid(row=1, column=0)
-        strength_modifier.grid(row=2, column=0)
+        self.strength_modifier.grid(row=2, column=0)
 
         dexterity_box_label = Label(attributes_frame, text='Dexterity')
-        self.dexterity_box = Entry(attributes_frame, width=5)
-        dexterity_modifier = Label(attributes_frame, text='+0')
+        self.dexterity_box = Entry(attributes_frame, width=5,
+                                  validatecommand=lambda: self.validate_attribute(self.dexterity_box, self.dexterity_modifier),
+                                  validate='focusout')
+        self.dexterity_modifier = Label(attributes_frame, text='+0')
         dexterity_box_label.grid(row=0, column=1)
         self.dexterity_box.grid(row=1, column=1)
-        dexterity_modifier.grid(row=2, column=1)
+        self.dexterity_modifier.grid(row=2, column=1)
 
         constitution_box_label = Label(attributes_frame, text='Constitution')
-        self.constitution_box = Entry(attributes_frame, width=5)
-        constitution_modifier = Label(attributes_frame, text='+0')
+        self.constitution_box = Entry(attributes_frame, width=5,
+                                  validatecommand=lambda: self.validate_attribute(self.constitution_box, self.constitution_modifier),
+                                  validate='focusout')
+        self.constitution_modifier = Label(attributes_frame, text='+0')
         constitution_box_label.grid(row=0, column=2)
         self.constitution_box.grid(row=1, column=2)
-        constitution_modifier.grid(row=2, column=2)
+        self.constitution_modifier.grid(row=2, column=2)
 
         intelligence_box_label = Label(attributes_frame, text='Intelligence')
-        self.intelligence_box = Entry(attributes_frame, width=5)
-        intelligence_modifier = Label(attributes_frame, text='+0')
+        self.intelligence_box = Entry(attributes_frame, width=5,
+                                  validatecommand=lambda: self.validate_attribute(self.intelligence_box, self.intelligence_modifier),
+                                  validate='focusout')
+        self.intelligence_modifier = Label(attributes_frame, text='+0')
         intelligence_box_label.grid(row=0, column=3)
         self.intelligence_box.grid(row=1, column=3)
-        intelligence_modifier.grid(row=2, column=3)
+        self.intelligence_modifier.grid(row=2, column=3)
 
         wisdom_box_label = Label(attributes_frame, text='Wisdom')
-        self.wisdom_box = Entry(attributes_frame, width=5)
-        wisdom_modifier = Label(attributes_frame, text='+0')
+        self.wisdom_box = Entry(attributes_frame, width=5,
+                                  validatecommand=lambda: self.validate_attribute(self.wisdom_box, self.wisdom_modifier),
+                                  validate='focusout')
+        self.wisdom_modifier = Label(attributes_frame, text='+0')
         wisdom_box_label.grid(row=0, column=4)
         self.wisdom_box.grid(row=1, column=4)
-        wisdom_modifier.grid(row=2, column=4)
+        self.wisdom_modifier.grid(row=2, column=4)
 
         charisma_box_label = Label(attributes_frame, text='Charisma')
-        self.charisma_box = Entry(attributes_frame, width=5)
-        charisma_modifier = Label(attributes_frame, text='+0')
+        self.charisma_box = Entry(attributes_frame, width=5,
+                                  validatecommand=lambda: self.validate_attribute(self.charisma_box, self.charisma_modifier),
+                                  validate='focusout')
+        self.charisma_modifier = Label(attributes_frame, text='+0')
         charisma_box_label.grid(row=0, column=5)
         self.charisma_box.grid(row=1, column=5)
-        charisma_modifier.grid(row=2, column=5)
+        self.charisma_modifier.grid(row=2, column=5)
         
         # create list of attributes for use in generate values
         self.attributes_list = [self.strength_box, self.dexterity_box, self.constitution_box,
@@ -150,14 +162,14 @@ class Character:
         initiative_text = Entry(hitpoints_frame, width=10)
         initiative_text.insert(0, '0')  # Default value
         speed_label = Label(hitpoints_frame, text='Speed')
-        speed_text = Entry(hitpoints_frame, width=10)
-        speed_text.insert(0, '0')  # Default value
+        self.speed_text = Entry(hitpoints_frame, width=10)
+        self.speed_text.insert(0, '0')  # Default value
         armour_class_label.grid(row=2, column=0)
         armour_class_text.grid(row=3, column=0)
         initiative_label.grid(row=2, column=1)
         initiative_text.grid(row=3, column=1)
         speed_label.grid(row=2, column=2)
-        speed_text.grid(row=3, column=2)
+        self.speed_text.grid(row=3, column=2)
 
         # Saving Throws Subframe
         saving_throws_subframe = LabelFrame(health_frame, text='Saving Throws')
@@ -316,10 +328,10 @@ class Character:
         prof_xscroll.grid(row=1, column=0, sticky='nsew')
 
         # text box
-        proficiencies_box = Text(proficiencies_subframe, width=30, height=15, xscrollcommand=prof_xscroll.set)
-        prof_xscroll.config(command=proficiencies_box.xview)
-        proficiencies_box.config(undo=True, wrap=NONE)
-        proficiencies_box.grid(row=0, column=0)
+        self.proficiencies_box = Text(proficiencies_subframe, width=30, height=15, xscrollcommand=prof_xscroll.set)
+        prof_xscroll.config(command=self.proficiencies_box.xview)
+        self.proficiencies_box.config(undo=True, wrap=NONE)
+        self.proficiencies_box.grid(row=0, column=0)
 
         # end of proficiencies frame
 
@@ -331,16 +343,38 @@ class Character:
 
     def nothing(self):
         pass
+    
+    def validate_attribute(self, entry, modifier):
+        attribute = entry.get()
+        # checks if attribute is empty or not
+        if attribute:
+            # checks if atribute is in between 1 and 30 inclusive
+            if attribute.isdigit() and int(attribute) in range (1, 31):
+                entry.config(fg='black')
+                # run modifier code
+                temp_modifier = self.determine_modifier(int(entry.get()))
+                modifier.config(text=temp_modifier)
+                return True
+            else:
+                # error
+                entry.config(fg='red')
+                modifier.config(text='+0')
+                return False
+        else:
+            modifier.config(text='+0')    
+        return True
 
     def parse_race_default_csv(self, filename):
-        races_default_list = []
+        races_default_dict = {}
         with open(filename, 'r') as file:
             reader = csv.reader(file)
             header = next(reader)
             for row in reader:
-                races_default_list.append(row)
+                key = row[0]
+                value = row[1:]
+                races_default_dict[key] = value
 
-        return races_default_list
+        return races_default_dict
 
     def lock_button(self, entry, button):
         # if button is enabled, disabled it and recess it. otherwise do the opposite
@@ -351,11 +385,33 @@ class Character:
             entry.config(state='normal')
             button.config(relief=RAISED)
     
+    def load_default_race_values(self, race):
+        race_options = self.race_default_dict[race]
+        attributes_list = [self.strength_box, self.dexterity_box, self.constitution_box,
+                           self.intelligence_box, self.wisdom_box, self.charisma_box]
+        race_attributes = race_options[1:-1]
+
+        # change speed
+        self.speed_text.delete(0, END)
+        self.speed_text.insert(END, str(race_options[0]))
+
+        # change attributes
+        for i, option in enumerate(race_attributes):
+            #attributes_list[i].config(text=str(option))
+            attributes_list[i].delete(0, END)
+            if option != 0:
+                attributes_list[i].insert(END, str(option))
+        
+        # change proficiencies
+        self.proficiencies_box.delete('1.0', END)
+        self.proficiencies_box.insert(END, race_options[-1].replace('\\n', '\n'))
+        # TODO have dialog pox pop up asking if we want to change the default values or not
+
     def determine_modifier(self, score):
         if score % 2 != 0:
             score -= 1
         
-        modifier = (score - 10) / 2
+        modifier = int((score - 10) / 2)
 
         if modifier >= 0:
             return '+' + str(modifier)
@@ -516,7 +572,7 @@ if __name__ == '__main__':
     root = Tk()
     root.title('Character Smith')
     root.geometry('800x1000')
-    # root.bind_all("<Button-1>", lambda event: event.widget.focus_set())
+    root.bind_all("<Button-1>", lambda event: event.widget.focus_set())
 
     character = Character(root)
 
