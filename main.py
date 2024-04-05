@@ -168,10 +168,17 @@ class Character:
         charisma_box_label.grid(row=0, column=5)
         self.charisma_box.grid(row=1, column=5)
         self.charisma_modifier.grid(row=2, column=5)
-        
+
+        genereate_attributes_button = Button(attributes_frame, text='Generate Attributes', command=self.generate_attributes)
+        genereate_attributes_button.grid(row=3, column=2, columnspan=2)
+
         # create list of attributes for use in generate values
         self.attributes_list = [self.strength_box, self.dexterity_box, self.constitution_box,
                                 self.intelligence_box, self.wisdom_box, self.charisma_box]
+        
+        # create list of modifiers for use in generative values
+        self.modifiers_list = [self.strength_modifier, self.dexterity_modifier, self.constitution_modifier,
+                               self.intelligence_modifier, self.wisdom_modifier, self.charisma_modifier]
 
         # create health frame
         health_frame = Frame(main_frame)
@@ -219,6 +226,11 @@ class Character:
         self.initiative_text.grid(row=3, column=1)
         speed_label.grid(row=2, column=2)
         self.speed_text.grid(row=3, column=2)
+
+        # create list for all non-negative integer values
+        # this will be used for error-checking on save
+        self.all_pos_int_entries = [self.max_hp_text, self.current_hp_text, self.armour_class_text,
+                                    self.initiative_text, self.speed_text]
 
         # Saving Throws Subframe
         saving_throws_subframe = LabelFrame(health_frame, text='Saving Throws')
@@ -457,21 +469,28 @@ class Character:
                            self.intelligence_box, self.wisdom_box, self.charisma_box]
         race_attributes = race_options[1:-1]
 
-        # change speed
-        self.speed_text.delete(0, END)
-        self.speed_text.insert(END, str(race_options[0]))
-
-        # change attributes
-        for i, option in enumerate(race_attributes):
-            #attributes_list[i].config(text=str(option))
-            attributes_list[i].delete(0, END)
-            if option != 0:
-                attributes_list[i].insert(END, str(option))
+        # have message box appear to determine if code should run
+        race_change = messagebox.askyesno(title='None',
+                                                message='Do you want to change the character\'s race values? '
+                                                'This will replace all attributes, speed, and hitpoints to the default '
+                                                'values of the selected race (\'No\' will change the race but leave all '
+                                                'values as is).')
         
-        # change proficiencies
-        self.proficiencies_box.delete('1.0', END)
-        self.proficiencies_box.insert(END, race_options[-1].replace('\\n', '\n'))
-        # TODO have dialog pox pop up asking if we want to change the default values or not
+        if race_change:
+            # change speed
+            self.speed_text.delete(0, END)
+            self.speed_text.insert(END, str(race_options[0]))
+
+            # change attributes
+            for i, option in enumerate(race_attributes):
+                #attributes_list[i].config(text=str(option))
+                attributes_list[i].delete(0, END)
+                if option != 0:
+                    attributes_list[i].insert(END, str(option))
+            
+            # change proficiencies
+            self.proficiencies_box.delete('1.0', END)
+            self.proficiencies_box.insert(END, race_options[-1].replace('\\n', '\n'))
 
     def determine_modifier(self, score):
         if score % 2 != 0:
@@ -485,7 +504,7 @@ class Character:
     
     def generate_attributes(self):
         # run 6 times, one for each box. skip box if it is disabled
-        for attribute in self.attributes_list:
+        for index, attribute in enumerate(self.attributes_list):
             if attribute.cget('state') == 'normal':
                 # roll 4 dice, save 3 highest
                 temp_dice = []
@@ -499,7 +518,13 @@ class Character:
                 # we need to do a check for the race so that it gets added properly
                 # possibly have a variable for each attribute so that we can add it
                 # to the race modifier and then update the total
-                attribute.config(text=str(total))
+                attribute.delete(0, END)
+                attribute.insert(0,str(total))
+
+                # update modifier
+                self.modifiers_list[index].config(text=str(self.determine_modifier(total)))
+
+                #attribute.config(text=str(total))
                 
                 # also need to run the modifier
 
@@ -630,8 +655,37 @@ class Character:
         try:
             # TODO: VALIDATE ALL ENTRIES AND PROPMTS. ADD THEM TO THE MODEL WHEN IT IS ALL VALID
             # If not valid, throw an exception and tell the user what is invalid
+            # check level
+            level = self.character_level_entry.get()
+            if level:
+                if not level.lstrip('-').isdigit():
+                    print(level.isdigit())
+                    raise TypeError('Level must be a positive integer.')
+                if int(level) <= 0:
+                    raise Exception('Level must be 1 or above.')
+            else:
+                raise Exception('Level must be filled in.')
+
+            # check attributes
+            for entry in self.attributes_list:
+                attribute = entry.get()
+                if attribute:
+                    if not attribute.lstrip('-').isdigit():
+                        raise TypeError('Attributes must be integers.')
+                    
+                    if int(attribute) <= 0 or int(attribute) > 30:
+                        raise Exception('Attributes must be between 1 and 30 inclusive.')
+                else:
+                    raise Exception('All attributes must be filled in.')
+            # check hitpoints
+            for entry in self.all_pos_int_entries:
+                text = entry.get()
+                if text:
+                    valid_test = self.validate_hit_points(entry)
+                    if not valid_test:
+                        raise TypeError('Hit Points must be positive integers.')
+
             self.save_to_model(self.character_model)
-            #
 
             filename = filedialog.asksaveasfilename(initialdir="./EXPORTED_CHARACTERS", defaultextension=".json", filetypes=[("JSON files", "*.json")]) 
 
