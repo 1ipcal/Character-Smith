@@ -2,7 +2,7 @@ Race,Speed,Strength,Dexterity,Constitution,Intelligence,Wisdom,Charisma,Proficie
 Dwarf,25,0,0,2,0,0,0,Darkvision\nDwarven Resilience\nDwarven Combat Training\nStonecunning
 Elf,30,0,2,0,0,0,0,Darkvision\nKeen Senses\nFey Ancestry\nTrance
 Gnome,25,0,0,0,2,0,0,Darkvision\nGnome Cunning
-Half-Elf,30,0,0,0,0,0,0,Darkvision\nFey Ancestry\nSkill Versatility
+Half-Elf,30,0,0,0,0,0,2,Darkvision\nFey Ancestry\nSkill Versatility
 Half-Orc,30,2,0,1,0,0,0,Darkvision\nMenacing\nRelentless Endurance\nSavage Attacks
 Halfling,25,0,2,0,0,0,0,Lucky\nBrave\n\Halfling Nimbleness
 Human,30,1,1,1,1,1,1,
