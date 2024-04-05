@@ -1,7 +1,7 @@
 from tkinter import *
 from tkinter import ttk
 from random import randint
-import json
+import json, csv
 
 class Character:
     def __init__(self, root) -> None:
@@ -10,10 +10,11 @@ class Character:
 
         character_class_option = StringVar(root)
         character_race_option = StringVar(root)
-        class_file = open('ASSETS\\CLASSES.txt', 'r')
+        class_file = open('./ASSETS/CLASSES.txt', 'r')
         class_options = [line.strip() for line in class_file.readlines()]
-        race_file = open('ASSETS\\RACES.txt', 'r')
+        race_file = open('./ASSETS/RACES.txt', 'r')
         race_options = [line.strip() for line in race_file.readlines()]
+        race_default_list = self.parse_race_default_csv('./ASSETS/RACES_DEFAULT.csv')
         
         all_not_num_entry = []
 
@@ -328,6 +329,16 @@ class Character:
     def nothing(self):
         pass
 
+    def parse_race_default_csv(self, filename):
+        races_default_list = []
+        with open(filename, 'r') as file:
+            reader = csv.reader(file)
+            header = next(reader)
+            for row in reader:
+                races_default_list.append(row)
+
+        return races_default_list
+
     def lock_button(self, entry, button):
         # if button is enabled, disabled it and recess it. otherwise do the opposite
         if entry.cget('state') == 'normal':
@@ -449,9 +460,13 @@ class Character_Model:
 
     @classmethod
     def from_json(cls, json_str):
-        instance = cls()
-        instance.__dict__ = json.loads(json_str)
-        return instance
+        try:
+            instance = cls()
+            instance.__dict__ = json.loads(json_str)
+            return instance
+        except json.JSONDecodeError as e:
+            print(f"Invalid JSON: {e}")
+            return None
 
 if __name__ == '__main__':
     root = Tk()
@@ -468,6 +483,7 @@ if __name__ == '__main__':
     # with open('character.json', 'r') as f:
     #     json_str = f.read()
     #     loaded_character = character.character_model.from_json(json_str)
+    #     # TODO: Prompt user before loading the character_model
     #     character.character_model = loaded_character
     # 
     # print("Level: " + str(character.character_model.level))
