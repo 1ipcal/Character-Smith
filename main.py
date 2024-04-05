@@ -1,6 +1,9 @@
 from tkinter import *
-from tkinter import ttk
+from tkinter import ttk, filedialog, messagebox
 from random import randint
+import jsonschema
+from jsonschema import validate
+from schemas import character_model_schema
 import json, csv
 
 class Character:
@@ -32,8 +35,8 @@ class Character:
         clear_menu.add_command(label='Clear all', command=self.nothing)
         file_menu.add_cascade(label='Clear', menu=clear_menu)
         file_menu.add_separator()
-        file_menu.add_command(label='Import', command=self.nothing)
-        file_menu.add_command(label='Save as...', command=self.nothing)
+        file_menu.add_command(label='Import', command=self.import_character)
+        file_menu.add_command(label='Save as...', command=self.save_character)
         menu_bar.add_cascade(label='File', menu=file_menu)
         
         # create frame for character info
@@ -384,10 +387,50 @@ class Character:
         add_spell_window.geometry('400x400')
 
         spell_name_label = Label(add_spell_window, text='Spell Name')
-        spell_name_textbox = Text(add_spell_window, height=20, width=40)  # Adjust height and width as needed
+        spell_name_textbox = Text(add_spell_window, height=20, width=40)
         spell_name_label.grid(row=0, column=0)
         spell_name_textbox.grid(row=1, column=0)
+
+    def save_character(self):
+        try:
+            # TODO: VALIDATE ALL ENTRIES AND PROPMTS. ADD THEM TO THE MODEL WHEN IT IS ALL VALID
+            filename = filedialog.asksaveasfilename(initialdir="./EXPORTED_CHARACTERS", defaultextension=".json", filetypes=[("JSON files", "*.json")]) 
+
+            if filename:
+                with open(filename, 'w') as f:
+                    f.write(character.character_model.to_json())
+
+                print("File Created")
+            else:
+                Exception("No file selected")
+        except Exception as e:
+            print(f"An error occurred: {e}")
+            # TODO: Tell user which entry is invalid via popup. Have multiple exeptions for each entry
         
+    def import_character(self):
+        try:
+            filename = filedialog.askopenfilename(initialdir="./EXPORTED_CHARACTERS", filetypes=[("JSON files", "*.json")])
+
+            if filename:
+                with open(filename, 'r') as f:
+                    json_str = f.read()
+                    data = json.loads(json_str)
+
+                    # Validate the JSON data against the schema
+                    validate(instance=data, schema=character_model_schema)
+
+                    # If the JSON data is valid, ask the user if they want to import the character
+                    if messagebox.askyesno("Import Character", "The character file is valid. Do you want to import the character and replace all fields?"):
+                        self.character_model = character.character_model.from_json(json_str)
+                        
+                        print("Character Model Loaded")
+
+                        #TODO FILL IN ALL FIELDS WITH THE CHARACTER MODEL DATA
+        except jsonschema.exceptions.ValidationError as ve:
+            messagebox.showerror("Error", "Invalid JSON File! Please import a valid character")
+        except Exception as e:
+            messagebox.showerror("An error occurred", str(e))
+
 
 class Character_Model:
     def __init__(self) -> None:
@@ -419,15 +462,15 @@ class Character_Model:
             'charisma': False
         }
         self.hit_dice = {
-            'total': 0,
-            'current': 0
+            'total': "",
+            'current': ""
         }
         self.death_saves = {
-            'successes': 0,
-            'failures': 0
+            'successes': [False, False, False],
+            'failures': [False, False, False]
         }
         # Weapon attacks will be in a form of a list of dictionaries
-        # Example: [{'name': 'Sword', 'bonus_to_hit': 5, 'damage': '1d6 + 3'}, ...]
+        # Example: [{'name': 'Sword', 'bonus_to_hit': '5', 'damage': '1d6 + 3'}, ...]
         self.weapon_attacks = []
         self.abilities = ""
         self.skills = {
@@ -452,6 +495,7 @@ class Character_Model:
         }
         self.other_proficiencies = ""
         self.inventory = ""
+        self.spells = ""
 
     # Saving Data (instance attributes) to a JSON file. 
     # This will be used to save the Character Model
