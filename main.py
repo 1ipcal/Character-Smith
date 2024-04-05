@@ -144,30 +144,40 @@ class Character:
         hitpoints_frame.grid(row=0, column=0, sticky='ew')
         
         max_hp_label = Label(hitpoints_frame, text='Max HP')
-        max_hp_text = Entry(hitpoints_frame, width=10)
-        max_hp_text.insert(0, '0')  # Default value
+        self.max_hp_text = Entry(hitpoints_frame, width=10,
+                            validatecommand=lambda: self.validate_hit_points(self.max_hp_text),
+                            validate='focusout')
+        self.max_hp_text.insert(0, '0')  # Default value
         current_hp_label = Label(hitpoints_frame, text='Current HP')
-        current_hp_text = Entry(hitpoints_frame, width=20)
-        current_hp_text.insert(0, '0')  # Default value
+        self.current_hp_text = Entry(hitpoints_frame, width=20,
+                            validatecommand=lambda: self.validate_hit_points(self.current_hp_text),
+                            validate='focusout')
+        self.current_hp_text.insert(0, '0')  # Default value
         max_hp_label.grid(row=0, column=0)
-        max_hp_text.grid(row=1, column=0)
+        self.max_hp_text.grid(row=1, column=0)
         current_hp_label.grid(row=0, column=1, columnspan=2)
-        current_hp_text.grid(row=1, column=1, columnspan=2)
+        self.current_hp_text.grid(row=1, column=1, columnspan=2)
 
         # Armor Class, Speed, Initiative Subframe
         armour_class_label = Label(hitpoints_frame, text='Armor Class')
-        armour_class_text = Entry(hitpoints_frame, width=10)
-        armour_class_text.insert(0, '0')  # Default value
+        self.armour_class_text = Entry(hitpoints_frame, width=10,
+                            validatecommand=lambda: self.validate_hit_points(self.armour_class_text),
+                            validate='focusout')
+        self.armour_class_text.insert(0, '0')  # Default value
         initiative_label = Label(hitpoints_frame, text='Initiative')
-        initiative_text = Entry(hitpoints_frame, width=10)
-        initiative_text.insert(0, '0')  # Default value
+        self.initiative_text = Entry(hitpoints_frame, width=10,
+                            validatecommand=lambda: self.validate_hit_points(self.initiative_text),
+                            validate='focusout')
+        self.initiative_text.insert(0, '0')  # Default value
         speed_label = Label(hitpoints_frame, text='Speed')
-        self.speed_text = Entry(hitpoints_frame, width=10)
+        self.speed_text = Entry(hitpoints_frame, width=10,
+                            validatecommand=lambda: self.validate_hit_points(self.speed_text),
+                            validate='focusout')
         self.speed_text.insert(0, '0')  # Default value
         armour_class_label.grid(row=2, column=0)
-        armour_class_text.grid(row=3, column=0)
+        self.armour_class_text.grid(row=3, column=0)
         initiative_label.grid(row=2, column=1)
-        initiative_text.grid(row=3, column=1)
+        self.initiative_text.grid(row=3, column=1)
         speed_label.grid(row=2, column=2)
         self.speed_text.grid(row=3, column=2)
 
@@ -344,6 +354,17 @@ class Character:
     def nothing(self):
         pass
     
+    def validate_hit_points(self, entry):
+        number = entry.get()
+        if number:
+            if number.isdigit() and int(number) >= 0:
+                entry.config(fg='black')
+                return True
+            else:
+                entry.config(fg='red')
+                return False
+        return False
+
     def validate_attribute(self, entry, modifier):
         attribute = entry.get()
         # checks if attribute is empty or not
