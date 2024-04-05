@@ -398,7 +398,7 @@ class Character_Model:
         # Weapon attacks will be in a form of a list of dictionaries
         # Example: [{'name': 'Sword', 'bonus_to_hit': 5, 'damage': '1d6 + 3'}, ...]
         self.weapon_attacks = []
-        self.abilities = []
+        self.abilities = ""
         self.skills = {
             'acrobatics': False,
             'animal_handling': False,
@@ -419,7 +419,8 @@ class Character_Model:
             'stealth': False,
             'survival': False
         }
-        self.other_proficiencies = []
+        self.other_proficiencies = ""
+        self.inventory = ""
 
     # Saving Data (instance attributes) to a JSON file. 
     # This will be used to save the Character Model
