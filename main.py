@@ -14,10 +14,26 @@ class Character:
         class_options = [line.strip() for line in class_file.readlines()]
         race_file = open('ASSETS\\RACES.txt', 'r')
         race_options = [line.strip() for line in race_file.readlines()]
+        
+        all_not_num_entry = []
 
         # create main frame
         main_frame = Frame(self.root)
         main_frame.pack()
+        
+        # create menu bar
+        menu_bar = Menu(self.root)
+        self.root.config(menu=menu_bar)
+        
+        file_menu = Menu(menu_bar, tearoff=0)
+        clear_menu = Menu(file_menu, tearoff=0)
+        clear_menu.add_command(label='Clear', command=self.nothing)
+        clear_menu.add_command(label='Clear all', command=self.nothing)
+        file_menu.add_cascade(label='Clear', menu=clear_menu)
+        file_menu.add_separator()
+        file_menu.add_command(label='Import', command=self.nothing)
+        file_menu.add_command(label='Save as...', command=self.nothing)
+        menu_bar.add_cascade(label='File', menu=file_menu)
         
         # create frame for character info
         character_info_frame = LabelFrame(main_frame, text="Character Information")
@@ -221,6 +237,7 @@ class Character:
                 entry = Entry(weapon_attacks_subframe, width=17)
                 entry.grid(row=i, column=j)
                 row_entries.append(entry)
+                all_not_num_entry.append(entry)
             entries.append(row_entries)
 
         abilities_box = Text(weapon_attacks_subframe, width=40, height=20)
@@ -307,6 +324,9 @@ class Character:
         
         for widget in attributes_frame.winfo_children():
             widget.grid_configure(padx=3)    
+
+    def nothing(self):
+        pass
 
     def lock_button(self, entry, button):
         # if button is enabled, disabled it and recess it. otherwise do the opposite
