@@ -89,6 +89,7 @@ class Character:
 
         character_level_label = Label(character_info_frame, text='Level')
         self.character_level_entry = Entry(character_info_frame, width=3)
+        self.character_level_entry.insert(0, '1')
 
         character_race_label = Label(character_info_frame, text='Race')
         character_race_menu = OptionMenu(character_info_frame, self.character_race_option, *race_options, command=self.load_default_race_values)
