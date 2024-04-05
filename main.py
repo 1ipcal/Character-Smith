@@ -11,13 +11,50 @@ class Character:
         self.root = root
         self.character_model = Character_Model()
 
-        character_class_option = StringVar(root)
-        character_race_option = StringVar(root)
+        self.character_class_option = StringVar(root)
+        self.character_race_option = StringVar(root)
         class_file = open('./ASSETS/CLASSES.txt', 'r')
         class_options = [line.strip() for line in class_file.readlines()]
         race_file = open('./ASSETS/RACES.txt', 'r')
         race_options = [line.strip() for line in race_file.readlines()]
         self.race_default_dict = self.parse_race_default_csv('./ASSETS/RACES_DEFAULT.csv')
+
+        # create variables for all checkboxes
+        # saving throws
+        self.st_strength_var = BooleanVar()
+        self.st_dexterity_var = BooleanVar()
+        self.st_constitution_var = BooleanVar()
+        self.st_intelligence_var = BooleanVar()
+        self.st_wisdow_var = BooleanVar()
+        self.st_charisma_var = BooleanVar()
+        
+        # success and fail
+        self.success_var_1 = BooleanVar()
+        self.success_var_2 = BooleanVar()
+        self.success_var_3 = BooleanVar()
+        self.fail_var_1 = BooleanVar()
+        self.fail_var_2 = BooleanVar()
+        self.fail_var_3 = BooleanVar()
+        
+        # skills
+        self.acrobatics_var = BooleanVar()
+        self.animal_handling_var = BooleanVar()
+        self.arcana_var = BooleanVar()
+        self.athletics_var = BooleanVar()
+        self.deception_var = BooleanVar()
+        self.history_var = BooleanVar()
+        self.insight_var = BooleanVar()
+        self.intimidation_var = BooleanVar()
+        self.investigation_var = BooleanVar()
+        self.medicine_var = BooleanVar()
+        self.nature_var= BooleanVar()
+        self.perception_var = BooleanVar()
+        self.performance_var = BooleanVar()
+        self.persuasion_var = BooleanVar()
+        self.religion_var = BooleanVar()
+        self.sleight_var = BooleanVar()
+        self.stealth_var = BooleanVar()
+        self.survival_var = BooleanVar()
         
         all_not_num_entry = []
 
@@ -44,24 +81,24 @@ class Character:
         character_info_frame.grid(row=0, column=0, columnspan=3)
 
         character_name_label = Label(character_info_frame, text='Name')
-        character_name_entry = Entry(character_info_frame)
+        self.character_name_entry = Entry(character_info_frame)
 
         character_class_label = Label(character_info_frame, text='Class')
-        character_class_menu = OptionMenu(character_info_frame, character_class_option, *class_options)
+        character_class_menu = OptionMenu(character_info_frame, self.character_class_option, *class_options)
         character_class_menu.config(width=10)
 
         character_level_label = Label(character_info_frame, text='Level')
-        character_level_entry = Entry(character_info_frame, width=3)
+        self.character_level_entry = Entry(character_info_frame, width=3)
 
         character_race_label = Label(character_info_frame, text='Race')
-        character_race_menu = OptionMenu(character_info_frame, character_race_option, *race_options, command=self.load_default_race_values)
+        character_race_menu = OptionMenu(character_info_frame, self.character_race_option, *race_options, command=self.load_default_race_values)
         character_race_menu.config(width=10)
 
         character_name_label.grid(row=0, column=0, sticky=W)
-        character_name_entry.grid(row=1, column=0)
-        character_name_entry.insert(0, 'Hero')
+        self.character_name_entry.grid(row=1, column=0)
+        self.character_name_entry.insert(0, 'Hero')
         # character_name_entry.config(state='disabled')
-        character_name_button = Button(character_info_frame, text='Lock', command=lambda: self.lock_button(character_name_entry, character_name_button))
+        character_name_button = Button(character_info_frame, text='Lock', command=lambda: self.lock_button(self.character_name_entry, character_name_button))
         character_name_button.grid(row=1, column=1)
         
         character_class_label.grid(row=0, column=2, sticky=W)
@@ -71,7 +108,7 @@ class Character:
         character_race_menu.grid(row=1, column=3)
 
         character_level_label.grid(row=0, column=4)
-        character_level_entry.grid(row=1, column=4)
+        self.character_level_entry.grid(row=1, column=4)
 
         # create frame for attributes
         attributes_frame = LabelFrame(main_frame, text='Attributes')
@@ -174,6 +211,7 @@ class Character:
                             validatecommand=lambda: self.validate_hit_points(self.speed_text),
                             validate='focusout')
         self.speed_text.insert(0, '0')  # Default value
+        
         armour_class_label.grid(row=2, column=0)
         self.armour_class_text.grid(row=3, column=0)
         initiative_label.grid(row=2, column=1)
@@ -185,33 +223,34 @@ class Character:
         saving_throws_subframe = LabelFrame(health_frame, text='Saving Throws')
         saving_throws_subframe.grid(row=1, column=0, sticky='ew')
 
-        saving_throws_strength = Checkbutton(saving_throws_subframe, text='Strength')
-        saving_throws_dexterity = Checkbutton(saving_throws_subframe, text='Dexterity')
-        saving_throws_constitution = Checkbutton(saving_throws_subframe, text='Constitution')
-        saving_throws_intelligence = Checkbutton(saving_throws_subframe, text='Intelligence')
-        saving_throws_wisdom = Checkbutton(saving_throws_subframe, text='Wisdom')
-        saving_throws_charisma = Checkbutton(saving_throws_subframe, text='Charisma')
-        saving_throws_strength.grid(row=0, column=0, sticky='w')
-        saving_throws_dexterity.grid(row=1, column=0, sticky='w')
-        saving_throws_constitution.grid(row=2, column=0, sticky='w')
-        saving_throws_intelligence.grid(row=3, column=0, sticky='w')
-        saving_throws_wisdom.grid(row=4, column=0, sticky='w')
-        saving_throws_charisma.grid(row=5, column=0, sticky='w')
+        self.saving_throws_strength_checkbox = Checkbutton(saving_throws_subframe, text='Strength', variable=self.st_strength_var)
+        self.saving_throws_dexterity_checkbox = Checkbutton(saving_throws_subframe, text='Dexterity', variable=self.st_dexterity_var)
+        self.saving_throws_constitution_checkbox = Checkbutton(saving_throws_subframe, text='Constitution', variable=self.st_constitution_var)
+        self.saving_throws_intelligence_checkbox = Checkbutton(saving_throws_subframe, text='Intelligence', variable=self.st_intelligence_var)
+        self.saving_throws_wisdom_checkbox = Checkbutton(saving_throws_subframe, text='Wisdom', variable=self.st_wisdow_var)
+        self.saving_throws_charisma_checkbox = Checkbutton(saving_throws_subframe, text='Charisma', variable=self.st_charisma_var)
+        
+        self.saving_throws_strength_checkbox.grid(row=0, column=0, sticky='w')
+        self.saving_throws_dexterity_checkbox.grid(row=1, column=0, sticky='w')
+        self.saving_throws_constitution_checkbox.grid(row=2, column=0, sticky='w')
+        self.saving_throws_intelligence_checkbox.grid(row=3, column=0, sticky='w')
+        self.saving_throws_wisdom_checkbox.grid(row=4, column=0, sticky='w')
+        self.saving_throws_charisma_checkbox.grid(row=5, column=0, sticky='w')
 
         # Hit Dice Subframe
         hit_dice_subframe = LabelFrame(health_frame, text='Hit Dice')
         hit_dice_subframe.grid(row=2, column=0, sticky='ew')
 
         hit_dice_label = Label(hit_dice_subframe, text='Hit Dice')
-        hit_dice_text = Entry(hit_dice_subframe, width=16)
-        hit_dice_text.insert(0, '0')  # Default value
+        self.hit_dice_text = Entry(hit_dice_subframe, width=16)
+        self.hit_dice_text.insert(0, '0')  # Default value
         hit_dice_total_label = Label(hit_dice_subframe, text='Total')
-        hit_dice_total_text = Entry(hit_dice_subframe, width=16)
-        hit_dice_total_text.insert(0, '0')  # Default value
+        self.hit_dice_total_text = Entry(hit_dice_subframe, width=16)
+        self.hit_dice_total_text.insert(0, '0')  # Default value
         hit_dice_label.grid(row=0, column=0)
-        hit_dice_text.grid(row=1, column=0)
+        self.hit_dice_text.grid(row=1, column=0)
         hit_dice_total_label.grid(row=0, column=1)
-        hit_dice_total_text.grid(row=1, column=1)
+        self.hit_dice_total_text.grid(row=1, column=1)
 
         # Death Saves Subframe
         death_saves_subframe = LabelFrame(health_frame, text='Death Saves')
@@ -222,17 +261,21 @@ class Character:
         success_label.grid(row=0, column=0, sticky='w')
         failure_label.grid(row=1, column=0, sticky='w')
 
-        successes_checkboxes = []  # Variable to store the success checkboxes
+        self.successes_checkboxes_value = []  # Variable to store the success checkboxes
         for i in range(3):
-            success = Checkbutton(death_saves_subframe)
-            success.grid(row=0, column=i+1)
-            successes_checkboxes.append(success)
+            var = BooleanVar()
+            self.successes_checkboxes_value.append(var)
 
-        failure_checkboxes = [] # Variable to store the failures checkboxes
+            success = Checkbutton(death_saves_subframe, variable=var)
+            success.grid(row=0, column=i+1)
+
+        self.failure_checkboxes_value = [] # Variable to store the failures checkboxes
         for i in range(3):
-            failure = Checkbutton(death_saves_subframe)
+            var = BooleanVar()
+            self.failure_checkboxes_value.append(var)
+
+            failure = Checkbutton(death_saves_subframe, variable=var)
             failure.grid(row=1, column=i+1)
-            failure_checkboxes.append(failure)
 
         # create spell button that will open a new window
         spell_button = Button(health_frame, text='Spells', bg='azure2', command=lambda: self.open_spell_window())
@@ -256,7 +299,7 @@ class Character:
 
         # Create table rows
         table_rows = 5
-        entries = []  # This list will hold all the entry fields
+        self.weapon_entries = []  # This list will hold all the entry fields
         for i in range(1, table_rows + 1):
             row_entries = []  # This list will hold the entries for a single row
             for j in range(3):
@@ -264,10 +307,10 @@ class Character:
                 entry.grid(row=i, column=j)
                 row_entries.append(entry)
                 all_not_num_entry.append(entry)
-            entries.append(row_entries)
+            self.weapon_entries.append(row_entries)
 
-        abilities_box = Text(weapon_attacks_subframe, width=40, height=20)
-        abilities_box.grid(row=table_rows + 1, column=0, columnspan=3)
+        self.abilities_box = Text(weapon_attacks_subframe, width=40, height=20)
+        self.abilities_box.grid(row=table_rows + 1, column=0, columnspan=3)
 
         # End of Weapon Attacks & Abilities Subframe
 
@@ -276,13 +319,13 @@ class Character:
         inventory_frame.grid(row=3, column=1, sticky='n')
 
         # create inventory box
-        inventory_box = Text(inventory_frame, width=40, height=15, wrap='none')  # Set wrap to 'none' to enable horizontal scrolling
-        inventory_box.grid(row=0, column=0, sticky='ew')
+        self.inventory_box = Text(inventory_frame, width=40, height=15, wrap='none')  # Set wrap to 'none' to enable horizontal scrolling
+        self.inventory_box.grid(row=0, column=0, sticky='ew')
 
         # create horizontal scrollbar
-        xscrollbar = Scrollbar(inventory_frame, orient='horizontal', command=inventory_box.xview)
+        xscrollbar = Scrollbar(inventory_frame, orient='horizontal', command=self.inventory_box.xview)
         xscrollbar.grid(row=1, column=0, sticky='ew')
-        inventory_box['xscrollcommand'] = xscrollbar.set
+        self.inventory_box['xscrollcommand'] = xscrollbar.set
         
         # end of inventory subframe
 
@@ -290,42 +333,43 @@ class Character:
         skills_frame = LabelFrame(main_frame, text='Skills')
         skills_frame.grid(row=2, column=2, sticky='new')
 
-        acrobatics_check = Checkbutton(skills_frame, text='Acrobatics')
-        acrobatics_check.grid(row=0, column=0, sticky='w')
-        animalhandling_check = Checkbutton(skills_frame, text='Animal Handling')
-        animalhandling_check.grid(row=1, column=0, sticky='w')
-        arcana_check = Checkbutton(skills_frame, text='Arcana')
-        arcana_check.grid(row=2, column=0, sticky='w')
-        athletics_check = Checkbutton(skills_frame, text='Athletics')
-        athletics_check.grid(row=3, column=0, sticky='w')
-        deception_check = Checkbutton(skills_frame, text='Deception')
-        deception_check.grid(row=4, column=0, sticky='w')
-        history_check = Checkbutton(skills_frame, text='History')
-        history_check.grid(row=5, column=0, sticky='w')
-        insight_check = Checkbutton(skills_frame, text='Insight')
-        insight_check.grid(row=6, column=0, sticky='w')
-        intimidation_check = Checkbutton(skills_frame, text='Intimidation')
-        intimidation_check.grid(row=7, column=0, sticky='w')
-        investigation_check = Checkbutton(skills_frame, text='Investigation')
-        investigation_check.grid(row=8, column=0, sticky='w')
-        medicine_check = Checkbutton(skills_frame, text='Medicine')
-        medicine_check.grid(row=9, column=0, sticky='w')
-        nature_check = Checkbutton(skills_frame, text='Nature')
-        nature_check.grid(row=10, column=0, sticky='w')
-        perception_check = Checkbutton(skills_frame, text='Perception')
-        perception_check.grid(row=11, column=0, sticky='w')
-        performance_check = Checkbutton(skills_frame, text='Performance')
-        performance_check.grid(row=12, column=0, sticky='w')
-        persuasion_check = Checkbutton(skills_frame, text='Persuasion')
-        persuasion_check.grid(row=13, column=0, sticky='w')
-        religion_check = Checkbutton(skills_frame, text='Religion')
-        religion_check.grid(row=14, column=0, sticky='w')
-        sleight_check = Checkbutton(skills_frame, text='Sleight of Hand')
-        sleight_check.grid(row=15, column=0, sticky='w')
-        stealth_check = Checkbutton(skills_frame, text='Stealth')
-        stealth_check.grid(row=16, column=0, sticky='w')
-        survival_check = Checkbutton(skills_frame, text='Survival')
-        survival_check.grid(row=17, column=0, sticky='w')
+        self.acrobatics_check = Checkbutton(skills_frame, text='Acrobatics', variable=self.acrobatics_var)
+        self.animalhandling_check = Checkbutton(skills_frame, text='Animal Handling', variable=self.animal_handling_var)
+        self.arcana_check = Checkbutton(skills_frame, text='Arcana', variable=self.arcana_var)
+        self.athletics_check = Checkbutton(skills_frame, text='Athletics', variable=self.athletics_var)
+        self.deception_check = Checkbutton(skills_frame, text='Deception', variable=self.deception_var)
+        self.history_check = Checkbutton(skills_frame, text='History', variable=self.history_var)
+        self.insight_check = Checkbutton(skills_frame, text='Insight', variable=self.insight_var)
+        self.intimidation_check = Checkbutton(skills_frame, text='Intimidation', variable=self.intimidation_var)
+        self.investigation_check = Checkbutton(skills_frame, text='Investigation', variable=self.investigation_var)
+        self.medicine_check = Checkbutton(skills_frame, text='Medicine', variable=self.medicine_var)
+        self.nature_check = Checkbutton(skills_frame, text='Nature', variable=self.nature_var)
+        self.perception_check = Checkbutton(skills_frame, text='Perception', variable=self.perception_var)
+        self.performance_check = Checkbutton(skills_frame, text='Performance', variable=self.performance_var)
+        self.persuasion_check = Checkbutton(skills_frame, text='Persuasion', variable=self.persuasion_var)
+        self.religion_check = Checkbutton(skills_frame, text='Religion', variable=self.religion_var)
+        self.sleight_check = Checkbutton(skills_frame, text='Sleight of Hand', variable=self.sleight_var)
+        self.stealth_check = Checkbutton(skills_frame, text='Stealth', variable=self.stealth_var)
+        self.survival_check = Checkbutton(skills_frame, text='Survival', variable=self.survival_var)
+
+        self.acrobatics_check.grid(row=0, column=0, sticky='w')
+        self.animalhandling_check.grid(row=1, column=0, sticky='w')
+        self.arcana_check.grid(row=2, column=0, sticky='w')
+        self.athletics_check.grid(row=3, column=0, sticky='w')
+        self.deception_check.grid(row=4, column=0, sticky='w')
+        self.history_check.grid(row=5, column=0, sticky='w')
+        self.insight_check.grid(row=6, column=0, sticky='w')
+        self.intimidation_check.grid(row=7, column=0, sticky='w')
+        self.investigation_check.grid(row=8, column=0, sticky='w')
+        self.medicine_check.grid(row=9, column=0, sticky='w')
+        self.nature_check.grid(row=10, column=0, sticky='w')
+        self.perception_check.grid(row=11, column=0, sticky='w')
+        self.performance_check.grid(row=12, column=0, sticky='w')
+        self.persuasion_check.grid(row=13, column=0, sticky='w')
+        self.religion_check.grid(row=14, column=0, sticky='w')
+        self.sleight_check.grid(row=15, column=0, sticky='w')
+        self.stealth_check.grid(row=16, column=0, sticky='w')
+        self.survival_check.grid(row=17, column=0, sticky='w')
         
         # create proficiencies frame
         proficiencies_frame = LabelFrame(main_frame, text='Other Proficiencies')
@@ -468,9 +512,95 @@ class Character:
         spell_name_label.grid(row=0, column=0)
         spell_name_textbox.grid(row=1, column=0)
 
+    def save_to_model(self, character_model) -> None:
+        """
+        This functions assumes that all data is valid and saves it to the character model
+        """
+        # Save Name, Class, Race, Level to Model
+        character_model.character_name = self.character_name_entry.get()
+        character_model.character_class = self.character_class_option.get()
+        character_model.race = self.character_race_option.get()
+        character_model.level = int(self.character_level_entry.get())
+
+        # Save Hitpoints to Model
+        character_model.hitpoints['max'] = int(self.max_hp_text.get())
+        character_model.hitpoints['current'] = int(self.current_hp_text.get())
+
+        # Save Armor Class, Initiative
+        character_model.armor_class = int(self.armour_class_text.get())
+        character_model.initiative = int(self.initiative_text.get())
+        character_model.speed = int(self.speed_text.get())
+
+        # Save Hit Dice to Model
+        character_model.hit_dice['total'] = self.hit_dice_text.get()
+        character_model.hit_dice['current'] = self.hit_dice_total_text.get()
+        
+        # Save Attributes to Model
+        character_model.attributes['strength'] = int(self.strength_box.get())
+        character_model.attributes['dexterity'] = int(self.dexterity_box.get())
+        character_model.attributes['constitution'] = int(self.constitution_box.get())
+        character_model.attributes['intelligence'] = int(self.intelligence_box.get())
+        character_model.attributes['wisdom'] = int(self.wisdom_box.get())
+        character_model.attributes['charisma'] = int(self.charisma_box.get())
+
+        # Save Saving Throws Checbox Values to Model
+        character_model.saving_throws['strength'] = self.st_strength_var.get()
+        character_model.saving_throws['dexterity'] = self.st_charisma_var.get()
+        character_model.saving_throws['constitution'] = self.st_constitution_var.get()
+        character_model.saving_throws['intelligence'] = self.st_intelligence_var.get()
+        character_model.saving_throws['wisdom'] = self.st_wisdow_var.get()
+        character_model.saving_throws['charisma'] = self.st_charisma_var.get()
+
+        # Save Death Saves to Model
+        for i in range(3):
+            character_model.death_saves['successes'][i] = self.successes_checkboxes_value[i].get()
+            character_model.death_saves['failures'][i] = self.failure_checkboxes_value[i].get()
+
+        # Save Skills to Model
+        character_model.skills['acrobatics'] = self.acrobatics_var.get()
+        character_model.skills['animal_handling'] = self.animal_handling_var.get()
+        character_model.skills['arcana'] = self.arcana_var.get()
+        character_model.skills['athletics'] = self.athletics_var.get()
+        character_model.skills['deception'] = self.deception_var.get()
+        character_model.skills['history'] = self.history_var.get()
+        character_model.skills['insight'] = self.insight_var.get()
+        character_model.skills['intimidation'] = self.intimidation_var.get()
+        character_model.skills['investigation'] = self.investigation_var.get()
+        character_model.skills['medicine'] = self.medicine_var.get()
+        character_model.skills['nature'] = self.nature_var.get()
+        character_model.skills['perception'] = self.perception_var.get()
+        character_model.skills['performance'] = self.performance_var.get()
+        character_model.skills['persuasion'] = self.persuasion_var.get()
+        character_model.skills['religion'] = self.religion_var.get()
+        character_model.skills['sleight_of_hand'] = self.sleight_var.get()
+        character_model.skills['stealth'] = self.stealth_var.get()
+        character_model.skills['survival'] = self.survival_var.get()
+
+        # Save Weapon Attacks & Abilities to Model
+        character_model.weapon_attacks = []
+        for entry in self.weapon_entries:
+            weapon = {
+                'name': entry[0].get(),
+                'bonus_to_hit': entry[1].get(),
+                'damage': entry[2].get()
+            }
+            character_model.weapon_attacks.append(weapon)
+
+        character_model.abilities = self.abilities_box.get('1.0', END)
+
+        # Save Inventory, Proficiencies, and Spells to Model
+        character_model.inventory = self.inventory_box.get('1.0', END)
+        character_model.other_proficiencies = self.proficiencies_box.get('1.0', END)
+        # TODO
+        # character_model.spells = self.spells_box.get('1.0', END)
+
     def save_character(self):
         try:
             # TODO: VALIDATE ALL ENTRIES AND PROPMTS. ADD THEM TO THE MODEL WHEN IT IS ALL VALID
+            # If not valid, throw an exception and tell the user what is invalid
+            self.save_to_model(self.character_model)
+            #
+
             filename = filedialog.asksaveasfilename(initialdir="./EXPORTED_CHARACTERS", defaultextension=".json", filetypes=[("JSON files", "*.json")]) 
 
             if filename:
