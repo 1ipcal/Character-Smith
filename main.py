@@ -200,7 +200,7 @@ class Character:
         
         # Create Weapon Attacks & Abilities Subframe
         weapon_attacks_subframe = LabelFrame(main_frame, text='Weapon Attacks & Abilities')
-        weapon_attacks_subframe.grid(row=2, column=1, sticky='n')
+        weapon_attacks_subframe.grid(row=2, column=1, sticky='ns')
 
         # Create weapon frame
         attack_frame = LabelFrame(weapon_attacks_subframe, text='Weapon Attacks & Abilities')
@@ -228,9 +228,24 @@ class Character:
 
         # End of Weapon Attacks & Abilities Subframe
 
+        # create inventory frame
+        inventory_frame = LabelFrame(main_frame, text='Inventory')
+        inventory_frame.grid(row=3, column=1, sticky='n')
+
+        # create inventory box
+        inventory_box = Text(inventory_frame, width=40, height=15, wrap='none')  # Set wrap to 'none' to enable horizontal scrolling
+        inventory_box.grid(row=0, column=0, sticky='ew')
+
+        # create horizontal scrollbar
+        xscrollbar = Scrollbar(inventory_frame, orient='horizontal', command=inventory_box.xview)
+        xscrollbar.grid(row=1, column=0, sticky='ew')
+        inventory_box['xscrollcommand'] = xscrollbar.set
+        
+        # end of inventory subframe
+
         # create skills frame
         skills_frame = LabelFrame(main_frame, text='Skills')
-        skills_frame.grid(row=2, column=2)
+        skills_frame.grid(row=2, column=2, sticky='new')
 
         acrobatics_check = Checkbutton(skills_frame, text='Acrobatics')
         acrobatics_check.grid(row=0, column=0, sticky='w')
@@ -270,15 +285,22 @@ class Character:
         survival_check.grid(row=17, column=0, sticky='w')
         
         # create proficiencies frame
-        proficiencies_frame = LabelFrame(skills_frame, text='Other Proficiencies')
-        proficiencies_frame.grid(row=18, column=0)
-        # scrollbar
-        prof_xscroll = Scrollbar(proficiencies_frame, orient='horizontal')
+        proficiencies_frame = LabelFrame(main_frame, text='Other Proficiencies')
+        proficiencies_frame.grid(row=3, column=2)
+
+        # create a subframe inside the proficiencies frame
+        proficiencies_subframe = Frame(proficiencies_frame)
+        proficiencies_subframe.grid(row=0, column=0)
+        prof_xscroll = Scrollbar(proficiencies_subframe, orient='horizontal')
         prof_xscroll.grid(row=1, column=0, sticky='nsew')
-        proficiencies_box = Text(proficiencies_frame, width=30, height=10, xscrollcommand=prof_xscroll.set)
+
+        # text box
+        proficiencies_box = Text(proficiencies_subframe, width=30, height=15, xscrollcommand=prof_xscroll.set)
         prof_xscroll.config(command=proficiencies_box.xview)
         proficiencies_box.config(undo=True, wrap=NONE)
         proficiencies_box.grid(row=0, column=0)
+
+        # end of proficiencies frame
 
         for widget in character_info_frame.winfo_children():
             widget.grid_configure(padx=3)
@@ -331,9 +353,9 @@ class Character:
         add_spell_window.geometry('400x400')
 
         spell_name_label = Label(add_spell_window, text='Spell Name')
-        spell_name_entry = Entry(add_spell_window)
+        spell_name_textbox = Text(add_spell_window, height=20, width=40)  # Adjust height and width as needed
         spell_name_label.grid(row=0, column=0)
-        spell_name_entry.grid(row=0, column=1)
+        spell_name_textbox.grid(row=1, column=0)
         
 
 class Character_Model:
