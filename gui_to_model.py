@@ -3,6 +3,10 @@ from tkinter import END
 def convert_gui_to_model(character_gui, character_model) -> None:
     """
     This functions assumes that all data is valid and saves it to the character model
+
+    :param character_gui: The character GUI object
+    :param character_model: The character model object
+    :return: None
     """
     # Save Name, Class, Race, Level to Model
     character_model.character_name = character_gui.character_name_entry.get()

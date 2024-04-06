@@ -2,6 +2,9 @@ import json
 
 class Character_Model:
     def __init__(self) -> None:
+        """
+        A class to represent a Character Model
+        """
         self.character_name = ""
         self.character_class = ""
         self.race = ""
@@ -68,10 +71,21 @@ class Character_Model:
     # Saving Data (instance attributes) to a JSON file. 
     # This will be used to save the Character Model
     def to_json(self):
+        """
+        This method will convert the instance attributes to a JSON string
+        
+        :return: JSON string
+        """
         return json.dumps(self.__dict__, indent=4)
 
     @classmethod
     def from_json(cls, json_str):
+        """
+        This method will convert a JSON string to a Character Model instance
+
+        :param json_str: JSON string
+        :return: Character Model instance
+        """
         try:
             instance = cls()
             instance.__dict__ = json.loads(json_str)

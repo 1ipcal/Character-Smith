@@ -4,6 +4,10 @@ def convert_model_to_gui(character_gui, character_model):
     """
     This function will take the character model and fill in all the fields in the GUI
     This function assumes that all fields in the character model are valid based on the save function
+
+    :param character_gui: The character GUI object
+    :param character_model: The character model object
+    :return: None
     """
     # Fill in the character information
     character_gui.character_name_entry.delete(0, END)

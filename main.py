@@ -13,6 +13,9 @@ import csv
 
 class Character:
     def __init__(self, root) -> None:
+        """
+        Initialize the character sheet creator GUI
+        """
         self.root = root
         self.character_model = character_model.Character_Model()
 
@@ -508,10 +511,13 @@ class Character:
         for widget in attributes_frame.winfo_children():
             widget.grid_configure(padx=3)
 
-    def nothing(self):
-        pass
+    def validate_hit_points(self, entry)->bool:
+        """
+        Validates the hit point entries to ensure it is a non-negative integer
 
-    def validate_hit_points(self, entry):
+        :param entry: the entry widget to validate
+        :return: True if the entry is valid, False otherwise
+        """
         number = entry.get()
         if number:
             if number.isdigit() and int(number) >= 0:
@@ -522,7 +528,14 @@ class Character:
                 return False
         return False
 
-    def validate_attribute(self, entry, modifier):
+    def validate_attribute(self, entry, modifier)->bool:
+        """
+        Validates the attribute entries to ensure it is a number between 1 and 30
+
+        :param entry: the entry widget to validate
+        :param modifier: the label widget to update the modifier
+        :return: True if the entry is valid, False otherwise
+        """
         attribute = entry.get()
         # checks if attribute is empty or not
         if attribute:
@@ -542,7 +555,13 @@ class Character:
             modifier.config(text='+0')
         return True
 
-    def parse_race_default_csv(self, filename):
+    def parse_race_default_csv(self, filename)->dict:
+        """
+        Parses the csv file containing the default values for races into a dictionary
+
+        :param filename: the name of the file to parse
+        :return: a dictionary containing the default values for races
+        """
         races_default_dict = {}
         with open(filename, 'r') as file:
             reader = csv.reader(file)
@@ -554,7 +573,13 @@ class Character:
 
         return races_default_dict
 
-    def parse_class_default_csv(self, filename):
+    def parse_class_default_csv(self, filename)->dict:
+        """
+        Parses the csv file containing the default values for classes into a dictionary
+
+        :param filename: the name of the file to parse
+        :return: a dictionary containing the default values for classes
+        """
         class_default_dict = {}
         with open(filename, 'r') as file:
             reader = csv.reader(file)
@@ -566,7 +591,13 @@ class Character:
 
         return class_default_dict
 
-    def load_default_race_values(self, race):
+    def load_default_race_values(self, race)->None:
+        """
+        Loads the default values for the selected race and updates the GUI
+
+        :param race: the dictionary containing the default values for the selected
+        :return: None
+        """
         race_options = self.race_default_dict[race]
         attributes_list = [self.strength_box, self.dexterity_box, self.constitution_box,
                            self.intelligence_box, self.wisdom_box, self.charisma_box]
@@ -596,7 +627,13 @@ class Character:
             self.proficiencies_box.insert(
                 END, race_options[-1].replace('\\n', '\n'))
 
-    def load_default_class_values(self, user_class):
+    def load_default_class_values(self, user_class)->None:
+        """
+        Loads the default values for the selected class and updates the GUI
+
+        :param user_class: the dictionary containing the default values for the selected class
+        :return: None
+        """
         class_options = self.class_default_dict[user_class]
 
         # have message box appear to determine if code should run
@@ -644,7 +681,15 @@ class Character:
                 else:
                     skill[1].set(False)
 
-    def determine_modifier(self, score):
+    def determine_modifier(self, score)->str:
+        """
+        determines the modifier for the given score.
+        The equation is as follows:
+            (score - 10) / 2
+
+        :param score: the score to determine the modifier for
+        :return: the modifier as a string
+        """
         if score % 2 != 0:
             score -= 1
 
@@ -654,7 +699,12 @@ class Character:
             return '+' + str(modifier)
         return str(modifier)
 
-    def generate_attributes(self):
+    def generate_attributes(self)->None:
+        """
+        Generates random attributes for the character
+
+        :return: None
+        """
         # run 6 times, one for each box. skip box if it is disabled
         for index, attribute in enumerate(self.attributes_list):
             if attribute.cget('state') == 'normal':
@@ -667,9 +717,7 @@ class Character:
 
                 # get total sum of dice
                 total = sum(temp_dice)
-                # we need to do a check for the race so that it gets added properly
-                # possibly have a variable for each attribute so that we can add it
-                # to the race modifier and then update the total
+
                 attribute.delete(0, END)
                 attribute.insert(0, str(total))
 
@@ -677,18 +725,26 @@ class Character:
                 self.modifiers_list[index].config(
                     text=str(self.determine_modifier(total)))
 
-                # attribute.config(text=str(total))
+    def save_and_close_spells(self, window, textbox)->None:
+        """
+        Saves the contents of the spell text box to the character model and closes the window
 
-                # also need to run the modifier
-
-    def save_and_close_spells(self, window, textbox):
+        :param window: the window to close
+        :param textbox: the text box to save the contents of
+        :return: None
+        """
         # Save the contents of the text box to the character model
         self.character_model.spells = textbox.get("1.0", 'end-1c')
 
         # Close the window
         window.destroy()
 
-    def open_spell_window(self):
+    def open_spell_window(self)->None:
+        """
+        Opens a new window to manage the character's spells
+
+        :return: None
+        """
         add_spell_window = Toplevel(self.root)
         add_spell_window.title('Manage Spells')
         add_spell_window.geometry('400x400')
@@ -724,10 +780,15 @@ class Character:
         add_spell_window.protocol("WM_DELETE_WINDOW", lambda: self.save_and_close_spells(
             add_spell_window, spell_name_textbox))
 
-    def save_character(self):
+    def save_character(self)->None:
+        """
+        Saves the character to a JSON file. 
+        This function will validate the character data before saving and will prompt the user to select a file to save to.
+        Any errors will be displayed in a messagebox, warning the user of the error.
+
+        :return: None
+        """
         try:
-            # TODO: VALIDATE ALL ENTRIES AND PROPMTS. ADD THEM TO THE MODEL WHEN IT IS ALL VALID
-            # If not valid, throw an exception and tell the user what is invalid
             # check level
             level = self.character_level_entry.get()
             if level:
@@ -776,7 +837,14 @@ class Character:
             messagebox.showerror(
                 title='Error', message=f"An error occurred: {e}")
 
-    def import_character(self):
+    def import_character(self)->None:
+        """
+        Imports a character from a JSON file. This function will validate the character data 
+        before importing it and will prompt the user to select a file to import from.
+        If the imported file is invalid, an error message will be displayed in a messagebox.
+
+        :return: None
+        """
         try:
             filename = filedialog.askopenfilename(
                 initialdir="./EXPORTED_CHARACTERS", filetypes=[("JSON files", "*.json")])
@@ -805,9 +873,11 @@ class Character:
         except Exception as e:
             messagebox.showerror("An error occurred", str(e))
 
-    def clear_all(self):
+    def clear_all(self)->None:
         """
-        this will import a blank character
+        This will import a blank character and clear the GUI
+
+        :return: None
         """
         filename = "./ASSETS/blank_character.json"
 
