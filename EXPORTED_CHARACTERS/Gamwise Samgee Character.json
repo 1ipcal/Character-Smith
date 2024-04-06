@@ -1,0 +1,96 @@
+{
+    "character_name": "Gamwise Samgee",
+    "character_class": "Rogue",
+    "race": "Gnome",
+    "level": 2,
+    "attributes": {
+        "strength": 11,
+        "dexterity": 11,
+        "constitution": 14,
+        "intelligence": 14,
+        "wisdom": 13,
+        "charisma": 16
+    },
+    "hitpoints": {
+        "max": 9,
+        "current": 9
+    },
+    "armor_class": 12,
+    "initiative": 0,
+    "speed": 25,
+    "saving_throws": {
+        "strength": false,
+        "dexterity": false,
+        "constitution": false,
+        "intelligence": true,
+        "wisdom": false,
+        "charisma": false
+    },
+    "hit_dice": {
+        "total": "d8",
+        "current": "0"
+    },
+    "death_saves": {
+        "successes": [
+            true,
+            false,
+            false
+        ],
+        "failures": [
+            false,
+            false,
+            false
+        ]
+    },
+    "weapon_attacks": [
+        {
+            "name": "Dagger",
+            "bonus_to_hit": "+6",
+            "damage": "1d4 Piercing"
+        },
+        {
+            "name": "",
+            "bonus_to_hit": "",
+            "damage": ""
+        },
+        {
+            "name": "",
+            "bonus_to_hit": "",
+            "damage": ""
+        },
+        {
+            "name": "",
+            "bonus_to_hit": "",
+            "damage": ""
+        },
+        {
+            "name": "",
+            "bonus_to_hit": "",
+            "damage": ""
+        }
+    ],
+    "abilities": "Scroll of Levitation\n",
+    "skills": {
+        "acrobatics": false,
+        "animal_handling": false,
+        "arcana": false,
+        "athletics": false,
+        "deception": false,
+        "history": false,
+        "insight": false,
+        "intimidation": true,
+        "investigation": true,
+        "medicine": false,
+        "nature": false,
+        "perception": true,
+        "performance": false,
+        "persuasion": false,
+        "religion": false,
+        "sleight_of_hand": false,
+        "stealth": true,
+        "survival": false
+    },
+    "other_proficiencies": "Darkvision\nGnome Cunning\n",
+    "inventory": "Gold: 17\n\nPotion of Healing\nRope\n",
+    "spells": ""
+}

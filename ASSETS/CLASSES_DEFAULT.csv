@@ -1,0 +1,13 @@
+Class,Hit Die,Max HP,Saving Throws,Num Of Skills,Skills Options
+Barbarian,d12,12,Strength-Constitution,2,Animal Handling-Athletics-Intimidation-Nature-Perception-Survival
+Bard,d8,8,Dexterity-Charisma,3,Athletics-Acrobatics-Sleight of Hand-Stealth-Arcana-History-Investigation-Nature-Religion-Animal Handling-Insight-Medicine-Perception-Survival-Deception-Intimidation-Performance-Persuasion
+Cleric,d8,8,Wisdom-Charisma,2,History-Insight-Medicine-Persuasion-Religion
+Druid,d8,8,Intelligence-Wisdom,2,Arcana-Animal Handling-Insight-Medicine-Nature-Perception-Religion-Survival
+Fighter,d10,10,Strength-Constitution,2,Acrobatics-Animal Handling-Athletics-History-Insight-Intimidation-Perception-Survival
+Monk,d8,8,Strength-Dexterity,2,Acrobatics-Athletics-History-Insight-Religion-Stealth
+Paladin,d10,10,Wisdom-Charisma,2,Athletics-Insight-Intimidation-Medicine-Persuasion-Religion
+Ranger,d10,10,Strength-Dexterity,3,Animal Handling-Athletics-Insight-Investigation-Nature-Perception-Stealth-Survival
+Rogue,d8,8,Dexterity-Intelligence,4,Acrobatics-Athletics-Deception-Insight-Intimidation-Investigation-Perception-Performance-Persuasion-Sleight of Hand-Stealth
+Sorcerer,d6,6,Constiution-Charisma,2,Arcana-Deception-Insight-Intimidation-Persuasion-Religion
+Warlock,d8,8,Wisdom-Charisma,2,Arcana-Deception-History-Intimidation-Investigation-Nature-Religion
+Wizard,d6,6,Intelligence-Wisdom,2,Arcana-History-Insight-Investigation-Medicine-Religion

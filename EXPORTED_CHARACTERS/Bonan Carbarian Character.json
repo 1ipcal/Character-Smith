@@ -1,0 +1,96 @@
+{
+    "character_name": "Bonan Carbarian",
+    "character_class": "Barbarian",
+    "race": "Human",
+    "level": 1,
+    "attributes": {
+        "strength": 16,
+        "dexterity": 14,
+        "constitution": 15,
+        "intelligence": 9,
+        "wisdom": 13,
+        "charisma": 11
+    },
+    "hitpoints": {
+        "max": 12,
+        "current": 9
+    },
+    "armor_class": 15,
+    "initiative": 5,
+    "speed": 30,
+    "saving_throws": {
+        "strength": true,
+        "dexterity": false,
+        "constitution": true,
+        "intelligence": false,
+        "wisdom": false,
+        "charisma": false
+    },
+    "hit_dice": {
+        "total": "1d12",
+        "current": "0"
+    },
+    "death_saves": {
+        "successes": [
+            false,
+            false,
+            false
+        ],
+        "failures": [
+            false,
+            false,
+            false
+        ]
+    },
+    "weapon_attacks": [
+        {
+            "name": "Greatsword",
+            "bonus_to_hit": "+5",
+            "damage": "2d6"
+        },
+        {
+            "name": "Handaxe",
+            "bonus_to_hit": "+5",
+            "damage": "1d6+3"
+        },
+        {
+            "name": "Javelin",
+            "bonus_to_hit": "+5",
+            "damage": "1d6+3"
+        },
+        {
+            "name": "",
+            "bonus_to_hit": "",
+            "damage": ""
+        },
+        {
+            "name": "",
+            "bonus_to_hit": "",
+            "damage": ""
+        }
+    ],
+    "abilities": "Rage\n",
+    "skills": {
+        "acrobatics": false,
+        "animal_handling": false,
+        "arcana": false,
+        "athletics": false,
+        "deception": false,
+        "history": false,
+        "insight": false,
+        "intimidation": true,
+        "investigation": false,
+        "medicine": false,
+        "nature": false,
+        "perception": false,
+        "performance": false,
+        "persuasion": false,
+        "religion": false,
+        "sleight_of_hand": false,
+        "stealth": false,
+        "survival": true
+    },
+    "other_proficiencies": "\n",
+    "inventory": "Backpack, bearskin cloak, bedroll, drum,\ngreatsword, handaxes (2), healer\u2019s kit,\njavelins (3), mess kit, pouch, tinderbox,\ntorches (5), traveler\u2019s clothing, waterskin,\nmoney (15 gp)\n\nArmor light armor, medium armor, shields\n",
+    "spells": ""
+}
