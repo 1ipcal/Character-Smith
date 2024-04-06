@@ -1,34 +1,34 @@
 {
-    "character_name": "Calvin1",
-    "character_class": "Barbarian",
-    "race": "Half-Orc",
+    "character_name": "Gamwise Samgee",
+    "character_class": "Rogue",
+    "race": "Gnome",
     "level": 2,
     "attributes": {
-        "strength": 10,
-        "dexterity": 7,
-        "constitution": 11,
+        "strength": 11,
+        "dexterity": 11,
+        "constitution": 14,
         "intelligence": 14,
-        "wisdom": 14,
-        "charisma": 10
+        "wisdom": 13,
+        "charisma": 16
     },
     "hitpoints": {
-        "max": 5,
-        "current": 5
+        "max": 9,
+        "current": 9
     },
-    "armor_class": 1,
-    "initiative": 2,
-    "speed": 30,
+    "armor_class": 12,
+    "initiative": 0,
+    "speed": 25,
     "saving_throws": {
-        "strength": true,
+        "strength": false,
         "dexterity": false,
-        "constitution": true,
-        "intelligence": false,
-        "wisdom": true,
+        "constitution": false,
+        "intelligence": true,
+        "wisdom": false,
         "charisma": false
     },
     "hit_dice": {
-        "total": "dice",
-        "current": "dicey"
+        "total": "d8",
+        "current": "0"
     },
     "death_saves": {
         "successes": [
@@ -37,21 +37,21 @@
             false
         ],
         "failures": [
-            true,
-            true,
+            false,
+            false,
             false
         ]
     },
     "weapon_attacks": [
         {
-            "name": "stouth",
-            "bonus_to_hit": "+5",
-            "damage": "1d4"
+            "name": "Dagger",
+            "bonus_to_hit": "+6",
+            "damage": "1d4 Piercing"
         },
         {
-            "name": "dog",
-            "bonus_to_hit": "+1",
-            "damage": "3d2"
+            "name": "",
+            "bonus_to_hit": "",
+            "damage": ""
         },
         {
             "name": "",
@@ -69,7 +69,7 @@
             "damage": ""
         }
     ],
-    "abilities": "You can breathe air AND WATER\n\n\n\n\n\n",
+    "abilities": "Scroll of Levitation\n",
     "skills": {
         "acrobatics": false,
         "animal_handling": false,
@@ -78,19 +78,19 @@
         "deception": false,
         "history": false,
         "insight": false,
-        "intimidation": false,
-        "investigation": false,
+        "intimidation": true,
+        "investigation": true,
         "medicine": false,
         "nature": false,
-        "perception": false,
+        "perception": true,
         "performance": false,
-        "persuasion": true,
+        "persuasion": false,
         "religion": false,
         "sleight_of_hand": false,
-        "stealth": false,
+        "stealth": true,
         "survival": false
     },
-    "other_proficiencies": "Darkvision\nMenacing\nRelentless Endurance\nSavage Attacks\n\n\n\n\n\n",
-    "inventory": "Gold: 3 (Valorant)\nhamburgers: 2\n11 flies\n\n\n\n\n\n",
-    "spells": "abrakadabra\nfireball\nicewakll"
+    "other_proficiencies": "Darkvision\nGnome Cunning\n",
+    "inventory": "Gold: 17\n\nPotion of Healing\nRope\n",
+    "spells": ""
 }

@@ -125,7 +125,10 @@ class Character:
         character_class_menu.config(width=10)
 
         character_level_label = Label(character_info_frame, text='Level')
-        self.character_level_entry = Entry(character_info_frame, width=3)
+        self.character_level_entry = Entry(character_info_frame, width=3,
+                                 validatecommand=lambda: self.validate_hit_points(
+                                     self.character_level_entry),
+                                 validate='focusout')
         self.character_level_entry.insert(0, '1')
 
         character_race_label = Label(character_info_frame, text='Race')

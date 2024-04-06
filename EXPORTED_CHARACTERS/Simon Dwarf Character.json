@@ -1,0 +1,96 @@
+{
+    "character_name": "Simon Dwarf",
+    "character_class": "Cleric",
+    "race": "Dwarf",
+    "level": 3,
+    "attributes": {
+        "strength": 16,
+        "dexterity": 15,
+        "constitution": 13,
+        "intelligence": 11,
+        "wisdom": 12,
+        "charisma": 15
+    },
+    "hitpoints": {
+        "max": 8,
+        "current": 8
+    },
+    "armor_class": 12,
+    "initiative": 0,
+    "speed": 25,
+    "saving_throws": {
+        "strength": false,
+        "dexterity": true,
+        "constitution": false,
+        "intelligence": false,
+        "wisdom": true,
+        "charisma": true
+    },
+    "hit_dice": {
+        "total": "d8",
+        "current": "0"
+    },
+    "death_saves": {
+        "successes": [
+            true,
+            false,
+            false
+        ],
+        "failures": [
+            true,
+            true,
+            false
+        ]
+    },
+    "weapon_attacks": [
+        {
+            "name": "Staff",
+            "bonus_to_hit": "+4",
+            "damage": "1d6 Bludgeon"
+        },
+        {
+            "name": "",
+            "bonus_to_hit": "",
+            "damage": ""
+        },
+        {
+            "name": "",
+            "bonus_to_hit": "",
+            "damage": ""
+        },
+        {
+            "name": "",
+            "bonus_to_hit": "",
+            "damage": ""
+        },
+        {
+            "name": "",
+            "bonus_to_hit": "",
+            "damage": ""
+        }
+    ],
+    "abilities": "Scroll of Binding\n",
+    "skills": {
+        "acrobatics": false,
+        "animal_handling": false,
+        "arcana": false,
+        "athletics": false,
+        "deception": false,
+        "history": true,
+        "insight": false,
+        "intimidation": false,
+        "investigation": false,
+        "medicine": true,
+        "nature": false,
+        "perception": false,
+        "performance": false,
+        "persuasion": false,
+        "religion": false,
+        "sleight_of_hand": false,
+        "stealth": false,
+        "survival": false
+    },
+    "other_proficiencies": "Darkvision\nDwarven Resilience\nDwarven Combat Training\nStonecunning\n",
+    "inventory": "Gold: 3\n\nWooden Spoon\nSilver Plate\nToolkit\n",
+    "spells": "Level 1: Cure"
+}
