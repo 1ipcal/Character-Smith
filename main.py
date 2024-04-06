@@ -538,41 +538,49 @@ class Character:
     def load_default_class_values(self, user_class):
         class_options = self.class_default_dict[user_class]
         
-        # change hit die
-        self.hit_dice_text.delete(0, END)
-        self.hit_dice_text.insert(END, str(class_options[0]))
+        # have message box appear to determine if code should run
+        class_change = messagebox.askyesno(title='None',
+                                                message='Do you want to change the character\'s class values? '
+                                                'This will replace all skills, the hit die, the saving throws, and the max HP to the default '
+                                                'values of the selected class (\'No\' will change the class but leave all '
+                                                'values as is).')
 
-        # change max hp
-        max_hp = int(class_options[1]) + int(self.constitution_modifier.cget('text'))
-        self.max_hp_text.delete(0, END)
-        self.max_hp_text.insert(END, max_hp)
+        if class_change:
+           # change hit die
+            self.hit_dice_text.delete(0, END)
+            self.hit_dice_text.insert(END, str(class_options[0]))
+
+            # change max hp
+            max_hp = int(class_options[1]) + int(self.constitution_modifier.cget('text'))
+            self.max_hp_text.delete(0, END)
+            self.max_hp_text.insert(END, max_hp)
         
-        # change saving throws
-        temp_st = list(class_options[2].split('-'))
-        for st in self.saving_throws_list:
-            if temp_st[0] == st[0] or temp_st[1] == st[0]:
-                st[1].set(True)
-            else:
-                st[1].set(False)
-        # change skills
-        class_skills = list(class_options[4].split('-'))
-        num_of_skills = int(class_options[3])
-        num_of_checked = 0
-        skills_to_change = []
+            # change saving throws
+            temp_st = list(class_options[2].split('-'))
+            for st in self.saving_throws_list:
+              if temp_st[0] == st[0] or temp_st[1] == st[0]:
+                  st[1].set(True)
+              else:
+                    st[1].set(False)
+            # change skills
+            class_skills = list(class_options[4].split('-'))
+            num_of_skills = int(class_options[3])
+            num_of_checked = 0
+            skills_to_change = []
                 
-        # randomly get skills
-        while num_of_checked < num_of_skills:
-            temp_index = randint(0, len(class_skills)-1)
-            temporary_skill = class_skills[temp_index]
-            if temporary_skill not in skills_to_change:
-                skills_to_change.append(temporary_skill)
-                num_of_checked += 1
+            # randomly get skills
+            while num_of_checked < num_of_skills:
+                temp_index = randint(0, len(class_skills)-1)
+                temporary_skill = class_skills[temp_index]
+                if temporary_skill not in skills_to_change:
+                    skills_to_change.append(temporary_skill)
+                    num_of_checked += 1
         
-        for skill in self.skills_list:
-            if skill[0] in skills_to_change:
-                skill[1].set(True)
-            else:
-                skill[1].set(False)
+            for skill in self.skills_list:
+                if skill[0] in skills_to_change:
+                    skill[1].set(True)
+                else:
+                    skill[1].set(False)
 
 
 
