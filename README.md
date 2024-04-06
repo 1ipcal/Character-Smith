@@ -76,7 +76,7 @@ The inventory is a text box that houses the inventory of the character. This inc
 ## Skills
 The skills house checkboxes that identify the skills in which the character is proficient in. Skills are determined by the character's class. For each class, it has a certain number of skills it selects from a certain subset of the skills, and thus each time a class is selected, the skills get rerolled to select new ones from the same subset.
 
-## Other Proficiencies.
+## Other Proficiencies
 The other proficiencies box is a text box housing any other proficiencies of the character. The proficiencies are determined by the character's race.
 
 # Credits
