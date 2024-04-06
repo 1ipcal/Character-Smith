@@ -84,12 +84,11 @@
         "nature": false,
         "perception": true,
         "performance": false,
-        "persuation": false,
+        "persuasion": false,
         "religion": true,
         "sleight_of_hand": false,
         "stealth": true,
-        "survival": false,
-        "persuasion": false
+        "survival": false
     },
     "other_proficiencies": "Darkvision\nMenacing\nRelentless Endurance\nSavage Attacks\n",
     "inventory": "Gold: 3 (Valorant)\nhamburgers: 2\n11 flies\n",

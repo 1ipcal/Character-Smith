@@ -1,5 +1,5 @@
 {
-    "character_name": "Ryan2",
+    "character_name": "Calvin1",
     "character_class": "Barbarian",
     "race": "Half-Orc",
     "level": 2,
@@ -69,28 +69,28 @@
             "damage": ""
         }
     ],
-    "abilities": "You can breathe air\n\n",
+    "abilities": "You can breathe air AND WATER\n\n\n\n\n\n",
     "skills": {
         "acrobatics": false,
-        "animal_handling": true,
+        "animal_handling": false,
         "arcana": false,
-        "athletics": true,
+        "athletics": false,
         "deception": false,
         "history": false,
-        "insight": true,
+        "insight": false,
         "intimidation": false,
         "investigation": false,
         "medicine": false,
         "nature": false,
-        "perception": true,
+        "perception": false,
         "performance": false,
-        "persuasion": false,
-        "religion": true,
+        "persuasion": true,
+        "religion": false,
         "sleight_of_hand": false,
-        "stealth": true,
+        "stealth": false,
         "survival": false
     },
-    "other_proficiencies": "Darkvision\nMenacing\nRelentless Endurance\nSavage Attacks\n\n",
-    "inventory": "Gold: 3 (Valorant)\nhamburgers: 2\n11 flies\n\n",
+    "other_proficiencies": "Darkvision\nMenacing\nRelentless Endurance\nSavage Attacks\n\n\n\n\n\n",
+    "inventory": "Gold: 3 (Valorant)\nhamburgers: 2\n11 flies\n\n\n\n\n\n",
     "spells": "abrakadabra\nfireball\nicewakll"
 }

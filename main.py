@@ -793,7 +793,7 @@ class Character_Model:
             'nature': False,
             'perception': False,
             'performance': False,
-            'persuation': False,
+            'persuasion': False,
             'religion': False,
             'sleight_of_hand': False,
             'stealth': False,

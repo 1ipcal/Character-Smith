@@ -95,13 +95,13 @@ character_model_schema = {
                 "nature": {"type": "boolean"},
                 "perception": {"type": "boolean"},
                 "performance": {"type": "boolean"},
-                "persuation": {"type": "boolean"},
+                "persuasion": {"type": "boolean"},
                 "religion": {"type": "boolean"},
                 "sleight_of_hand": {"type": "boolean"},
                 "stealth": {"type": "boolean"},
                 "survival": {"type": "boolean"}
             },
-            "required": ["acrobatics", "animal_handling", "arcana", "athletics", "deception", "history", "insight", "intimidation", "investigation", "medicine", "nature", "perception", "performance", "persuation", "religion", "sleight_of_hand", "stealth", "survival"]
+            "required": ["acrobatics", "animal_handling", "arcana", "athletics", "deception", "history", "insight", "intimidation", "investigation", "medicine", "nature", "perception", "performance", "persuasion", "religion", "sleight_of_hand", "stealth", "survival"]
         },
         "other_proficiencies": {"type": "string"},
         "inventory": {"type": "string"},
