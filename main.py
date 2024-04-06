@@ -19,12 +19,15 @@ class Character:
         self.root = root
         self.character_model = character_model.Character_Model()
 
+        # File path for character race and class options
         self.character_class_option = StringVar(root)
         self.character_race_option = StringVar(root)
+
         class_file = open('./ASSETS/CLASSES.txt', 'r')
         class_options = [line.strip() for line in class_file.readlines()]
         race_file = open('./ASSETS/RACES.txt', 'r')
         race_options = [line.strip() for line in race_file.readlines()]
+
         self.race_default_dict = self.parse_race_default_csv(
             './ASSETS/RACES_DEFAULT.csv')
         self.class_default_dict = self.parse_class_default_csv(
@@ -67,9 +70,11 @@ class Character:
         self.stealth_var = BooleanVar()
         self.survival_var = BooleanVar()
 
-        """The following scrollbar code is adapted from Codemy: https://www.youtube.com/watch?v=0WafQCaok6g
+        """The following scrollbar code is adapted from Codemy: 
+        https://www.youtube.com/watch?v=0WafQCaok6g
         """
-        # create root frame (this is to house the canvas and the frame within the canvas)
+        # create root frame (this is to house the canvas
+        # and the frame within the canvas)
         root_frame = Frame(self.root)
         root_frame.pack(fill=BOTH, expand=1)
 
@@ -604,11 +609,14 @@ class Character:
         race_attributes = race_options[1:-1]
 
         # have message box appear to determine if code should run
-        race_change = messagebox.askyesno(title='None',
-                                                message='Do you want to change the character\'s race values? '
-                                                'This will replace all attributes, speed, and hitpoints to the default '
-                                                'values of the selected race (\'No\' will change the race but leave all '
-                                                'values as is).')
+        message = (
+            "Do you want to change the character's race values? "
+            "This will replace all attributes, speed, and hitpoints to the default "
+            "values of the selected race. "
+            "'No' will change the race but leave all values as is."
+        )
+
+        race_change = messagebox.askyesno(title='None', message=message)
 
         if race_change:
             # change speed
@@ -637,11 +645,14 @@ class Character:
         class_options = self.class_default_dict[user_class]
 
         # have message box appear to determine if code should run
-        class_change = messagebox.askyesno(title='None',
-                                           message='Do you want to change the character\'s class values? '
-                                           'This will replace all skills, the hit die, the saving throws, and the max HP to the default '
-                                           'values of the selected class (\'No\' will change the class but leave all '
-                                           'values as is).')
+        error_message = (
+            "Do you want to change the character's class values? "
+            "This will replace all skills, the hit die, the saving throws, "
+            "and the max HP to the default values of the selected class. "
+            "'No' will change the class but leave all values as is."
+        )
+
+        class_change = messagebox.askyesno(title='None', message=error_message)
 
         if class_change:
            # change hit die
@@ -727,7 +738,8 @@ class Character:
 
     def save_and_close_spells(self, window, textbox)->None:
         """
-        Saves the contents of the spell text box to the character model and closes the window
+        Saves the contents of the spell text box to the character model and
+        closes the window
 
         :param window: the window to close
         :param textbox: the text box to save the contents of
@@ -776,15 +788,18 @@ class Character:
         # Load the spells from the character model into the text box
         spell_name_textbox.insert(END, self.character_model.spells)
 
-        # Bind the WM_DELETE_WINDOW protocol to a method that saves the contents of the text box to the character model
+        # Bind the WM_DELETE_WINDOW protocol to a method that saves the
+        # contents of the text box to the character model
         add_spell_window.protocol("WM_DELETE_WINDOW", lambda: self.save_and_close_spells(
             add_spell_window, spell_name_textbox))
 
     def save_character(self)->None:
         """
-        Saves the character to a JSON file. 
-        This function will validate the character data before saving and will prompt the user to select a file to save to.
-        Any errors will be displayed in a messagebox, warning the user of the error.
+        Saves the character to a JSON file.
+        This function will validate the character data before saving and will
+        prompt the user to select a file to save to.
+        Any errors will be displayed in a messagebox,
+        warning the user of the error.
 
         :return: None
         """
@@ -839,9 +854,11 @@ class Character:
 
     def import_character(self)->None:
         """
-        Imports a character from a JSON file. This function will validate the character data 
-        before importing it and will prompt the user to select a file to import from.
-        If the imported file is invalid, an error message will be displayed in a messagebox.
+        Imports a character from a JSON file. This function will validate the
+        character data before importing it and will prompt the user to select
+        a file to import from.
+        If the imported file is invalid, an error message will be displayed in
+        a messagebox.
 
         :return: None
         """
@@ -885,7 +902,7 @@ class Character:
         if not messagebox.askyesno("Clear Character", "Are you sure you want to clear the character sheet? Everything will be lost."):
             print("GUI Not Cleared")
             return
-        
+
         with open(filename, 'r') as f:
             json_str = f.read()
             self.character_model = character.character_model.from_json(json_str)
