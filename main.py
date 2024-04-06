@@ -18,6 +18,7 @@ class Character:
         race_file = open('./ASSETS/RACES.txt', 'r')
         race_options = [line.strip() for line in race_file.readlines()]
         self.race_default_dict = self.parse_race_default_csv('./ASSETS/RACES_DEFAULT.csv')
+        self.class_default_dict = self.parse_class_default_csv('./ASSETS/CLASSES_DEFAULT.csv')
 
         # create variables for all checkboxes
         # saving throws
@@ -25,7 +26,7 @@ class Character:
         self.st_dexterity_var = BooleanVar()
         self.st_constitution_var = BooleanVar()
         self.st_intelligence_var = BooleanVar()
-        self.st_wisdow_var = BooleanVar()
+        self.st_wisdom_var = BooleanVar()
         self.st_charisma_var = BooleanVar()
         
         # success and fail
@@ -84,7 +85,7 @@ class Character:
         self.character_name_entry = Entry(character_info_frame)
 
         character_class_label = Label(character_info_frame, text='Class')
-        character_class_menu = OptionMenu(character_info_frame, self.character_class_option, *class_options)
+        character_class_menu = OptionMenu(character_info_frame, self.character_class_option, *class_options, command=self.load_default_class_values)
         character_class_menu.config(width=10)
 
         character_level_label = Label(character_info_frame, text='Level')
@@ -240,7 +241,7 @@ class Character:
         self.saving_throws_dexterity_checkbox = Checkbutton(saving_throws_subframe, text='Dexterity', variable=self.st_dexterity_var)
         self.saving_throws_constitution_checkbox = Checkbutton(saving_throws_subframe, text='Constitution', variable=self.st_constitution_var)
         self.saving_throws_intelligence_checkbox = Checkbutton(saving_throws_subframe, text='Intelligence', variable=self.st_intelligence_var)
-        self.saving_throws_wisdom_checkbox = Checkbutton(saving_throws_subframe, text='Wisdom', variable=self.st_wisdow_var)
+        self.saving_throws_wisdom_checkbox = Checkbutton(saving_throws_subframe, text='Wisdom', variable=self.st_wisdom_var)
         self.saving_throws_charisma_checkbox = Checkbutton(saving_throws_subframe, text='Charisma', variable=self.st_charisma_var)
         
         self.saving_throws_strength_checkbox.grid(row=0, column=0, sticky='w')
@@ -249,6 +250,14 @@ class Character:
         self.saving_throws_intelligence_checkbox.grid(row=3, column=0, sticky='w')
         self.saving_throws_wisdom_checkbox.grid(row=4, column=0, sticky='w')
         self.saving_throws_charisma_checkbox.grid(row=5, column=0, sticky='w')
+
+        # saving throws list
+        self.saving_throws_list = [('Strength', self.st_strength_var),
+                                   ('Dexterity', self.st_dexterity_var),
+                                   ('Constitution', self.st_constitution_var),
+                                   ('Intelligence', self.st_intelligence_var),
+                                   ('Wisdom', self.st_wisdom_var),
+                                   ('Charisma', self.st_charisma_var)]
 
         # Hit Dice Subframe
         hit_dice_subframe = LabelFrame(health_frame, text='Hit Dice')
@@ -383,6 +392,26 @@ class Character:
         self.sleight_check.grid(row=15, column=0, sticky='w')
         self.stealth_check.grid(row=16, column=0, sticky='w')
         self.survival_check.grid(row=17, column=0, sticky='w')
+
+        # create skills list
+        self.skills_list = [('Acrobats', self.acrobatics_var),
+                            ('Animal Handling', self.animal_handling_var),
+                            ('Arcana', self.arcana_var),
+                            ('Athletics', self.athletics_var),
+                            ('Deception', self.deception_var),
+                            ('History', self.history_var),
+                            ('Insight', self.insight_var),
+                            ('Intimidation', self.intimidation_var),
+                            ('Investigation', self.investigation_var),
+                            ('Medicine', self.medicine_var),
+                            ('Nature', self.nature_var),
+                            ('Perception', self.perception_var),
+                            ('Performance', self.performance_var),
+                            ('Persuasion', self.persuasion_var),
+                            ('Religion', self.religion_var),
+                            ('Sleight of Hand', self.sleight_var),
+                            ('Stealth', self.stealth_var),
+                            ('Survival', self.survival_var)]
         
         # create proficiencies frame
         proficiencies_frame = LabelFrame(main_frame, text='Other Proficiencies')
@@ -453,6 +482,18 @@ class Character:
                 races_default_dict[key] = value
 
         return races_default_dict
+    
+    def parse_class_default_csv(self, filename):
+        class_default_dict = {}
+        with open(filename, 'r') as file:
+            reader = csv.reader(file)
+            header = next(reader)
+            for row in reader:
+                key = row[0]
+                value = row[1:]
+                class_default_dict[key] = value
+
+        return class_default_dict
 
     def lock_button(self, entry, button):
         # if button is enabled, disabled it and recess it. otherwise do the opposite
@@ -491,6 +532,48 @@ class Character:
             # change proficiencies
             self.proficiencies_box.delete('1.0', END)
             self.proficiencies_box.insert(END, race_options[-1].replace('\\n', '\n'))
+
+    def load_default_class_values(self, user_class):
+        class_options = self.class_default_dict[user_class]
+        
+        # change hit die
+        self.hit_dice_text.delete(0, END)
+        self.hit_dice_text.insert(END, str(class_options[0]))
+
+        # change max hp
+        max_hp = int(class_options[1]) + int(self.constitution_modifier.cget('text'))
+        self.max_hp_text.delete(0, END)
+        self.max_hp_text.insert(END, max_hp)
+        
+        # change saving throws
+        temp_st = list(class_options[2].split('-'))
+        for st in self.saving_throws_list:
+            if temp_st[0] == st[0] or temp_st[1] == st[0]:
+                st[1].set(True)
+            else:
+                st[1].set(False)
+        # change skills
+        class_skills = list(class_options[4].split('-'))
+        num_of_skills = int(class_options[3])
+        num_of_checked = 0
+        skills_to_change = []
+                
+        # randomly get skills
+        while num_of_checked < num_of_skills:
+            temp_index = randint(0, len(class_skills)-1)
+            temporary_skill = class_skills[temp_index]
+            if temporary_skill not in skills_to_change:
+                skills_to_change.append(temporary_skill)
+                num_of_checked += 1
+        
+        for skill in self.skills_list:
+            if skill[0] in skills_to_change:
+                skill[1].set(True)
+            else:
+                skill[1].set(False)
+
+
+
 
     def determine_modifier(self, score):
         if score % 2 != 0:
@@ -600,12 +683,12 @@ class Character:
         character_model.attributes['wisdom'] = int(self.wisdom_box.get())
         character_model.attributes['charisma'] = int(self.charisma_box.get())
 
-        # Save Saving Throws Checbox Values to Model
+        # Save Saving Throws Checkbox Values to Model
         character_model.saving_throws['strength'] = self.st_strength_var.get()
         character_model.saving_throws['dexterity'] = self.st_charisma_var.get()
         character_model.saving_throws['constitution'] = self.st_constitution_var.get()
         character_model.saving_throws['intelligence'] = self.st_intelligence_var.get()
-        character_model.saving_throws['wisdom'] = self.st_wisdow_var.get()
+        character_model.saving_throws['wisdom'] = self.st_wisdom_var.get()
         character_model.saving_throws['charisma'] = self.st_charisma_var.get()
 
         # Save Death Saves to Model

@@ -1,4 +1,3 @@
-Artificer
 Barbarian
 Bard
 Cleric
