@@ -4,6 +4,8 @@ from random import randint
 import jsonschema
 from jsonschema import validate
 from schemas import character_model_schema
+from model_to_gui import convert_model_to_gui
+from gui_to_model import convert_gui_to_model
 import json, csv
 
 class Character:
@@ -652,87 +654,6 @@ class Character:
         # Bind the WM_DELETE_WINDOW protocol to a method that saves the contents of the text box to the character model
         add_spell_window.protocol("WM_DELETE_WINDOW", lambda: self.save_and_close_spells(add_spell_window, spell_name_textbox))
 
-    def save_to_model(self, character_model) -> None:
-        """
-        This functions assumes that all data is valid and saves it to the character model
-        """
-        # Save Name, Class, Race, Level to Model
-        character_model.character_name = self.character_name_entry.get()
-        character_model.character_class = self.character_class_option.get()
-        character_model.race = self.character_race_option.get()
-        character_model.level = int(self.character_level_entry.get())
-
-        # Save Hitpoints to Model
-        character_model.hitpoints['max'] = int(self.max_hp_text.get())
-        character_model.hitpoints['current'] = int(self.current_hp_text.get())
-
-        # Save Armor Class, Initiative
-        character_model.armor_class = int(self.armour_class_text.get())
-        character_model.initiative = int(self.initiative_text.get())
-        character_model.speed = int(self.speed_text.get())
-
-        # Save Hit Dice to Model
-        character_model.hit_dice['total'] = self.hit_dice_text.get()
-        character_model.hit_dice['current'] = self.hit_dice_total_text.get()
-        
-        # Save Attributes to Model
-        character_model.attributes['strength'] = int(self.strength_box.get())
-        character_model.attributes['dexterity'] = int(self.dexterity_box.get())
-        character_model.attributes['constitution'] = int(self.constitution_box.get())
-        character_model.attributes['intelligence'] = int(self.intelligence_box.get())
-        character_model.attributes['wisdom'] = int(self.wisdom_box.get())
-        character_model.attributes['charisma'] = int(self.charisma_box.get())
-
-        # Save Saving Throws Checkbox Values to Model
-        character_model.saving_throws['strength'] = self.st_strength_var.get()
-        character_model.saving_throws['dexterity'] = self.st_charisma_var.get()
-        character_model.saving_throws['constitution'] = self.st_constitution_var.get()
-        character_model.saving_throws['intelligence'] = self.st_intelligence_var.get()
-        character_model.saving_throws['wisdom'] = self.st_wisdom_var.get()
-        character_model.saving_throws['charisma'] = self.st_charisma_var.get()
-
-        # Save Death Saves to Model
-        for i in range(3):
-            character_model.death_saves['successes'][i] = self.successes_checkboxes_value[i].get()
-            character_model.death_saves['failures'][i] = self.failure_checkboxes_value[i].get()
-
-        # Save Skills to Model
-        character_model.skills['acrobatics'] = self.acrobatics_var.get()
-        character_model.skills['animal_handling'] = self.animal_handling_var.get()
-        character_model.skills['arcana'] = self.arcana_var.get()
-        character_model.skills['athletics'] = self.athletics_var.get()
-        character_model.skills['deception'] = self.deception_var.get()
-        character_model.skills['history'] = self.history_var.get()
-        character_model.skills['insight'] = self.insight_var.get()
-        character_model.skills['intimidation'] = self.intimidation_var.get()
-        character_model.skills['investigation'] = self.investigation_var.get()
-        character_model.skills['medicine'] = self.medicine_var.get()
-        character_model.skills['nature'] = self.nature_var.get()
-        character_model.skills['perception'] = self.perception_var.get()
-        character_model.skills['performance'] = self.performance_var.get()
-        character_model.skills['persuasion'] = self.persuasion_var.get()
-        character_model.skills['religion'] = self.religion_var.get()
-        character_model.skills['sleight_of_hand'] = self.sleight_var.get()
-        character_model.skills['stealth'] = self.stealth_var.get()
-        character_model.skills['survival'] = self.survival_var.get()
-
-        # Save Weapon Attacks & Abilities to Model
-        character_model.weapon_attacks = []
-        for entry in self.weapon_entries:
-            weapon = {
-                'name': entry[0].get(),
-                'bonus_to_hit': entry[1].get(),
-                'damage': entry[2].get()
-            }
-            character_model.weapon_attacks.append(weapon)
-
-        character_model.abilities = self.abilities_box.get('1.0', END)
-
-        # Save Inventory, Proficiencies, and Spells to Model
-        character_model.inventory = self.inventory_box.get('1.0', END)
-        character_model.other_proficiencies = self.proficiencies_box.get('1.0', END)
-
-
     def save_character(self):
         try:
             # TODO: VALIDATE ALL ENTRIES AND PROPMTS. ADD THEM TO THE MODEL WHEN IT IS ALL VALID
@@ -767,7 +688,7 @@ class Character:
                     if not valid_test:
                         raise TypeError('Hit Points must be positive integers.')
 
-            self.save_to_model(self.character_model)
+            convert_gui_to_model(self, self.character_model)
 
             filename = filedialog.asksaveasfilename(initialdir="./EXPORTED_CHARACTERS", defaultextension=".json", filetypes=[("JSON files", "*.json")]) 
 
@@ -781,107 +702,6 @@ class Character:
         except Exception as e:
             print(f"An error occurred: {e}")
             # TODO: Tell user which entry is invalid via popup. Have multiple exeptions for each entry
-
-    def model_to_gui(self, character_model):
-        """
-        This function will take the character model and fill in all the fields in the GUI
-        This function assumes that all fields in the character model are valid based on the save function
-        """
-        # Fill in the character information
-        self.character_name_entry.delete(0, 'end')
-        self.character_name_entry.insert(0, character_model.character_name)
-        self.character_class_option.set(character_model.character_class)
-        self.character_race_option.set(character_model.race)
-        self.character_level_entry.delete(0, 'end')
-        self.character_level_entry.insert(0, str(character_model.level))
-
-        # Fill in the attributes
-        self.strength_box.delete(0, 'end')
-        self.strength_box.insert(0, str(character_model.attributes['strength']))
-        self.dexterity_box.delete(0, 'end')
-        self.dexterity_box.insert(0, str(character_model.attributes['dexterity']))
-        self.constitution_box.delete(0, 'end')
-        self.constitution_box.insert(0, str(character_model.attributes['constitution']))
-        self.intelligence_box.delete(0, 'end')
-        self.intelligence_box.insert(0, str(character_model.attributes['intelligence']))
-        self.wisdom_box.delete(0, 'end')
-        self.wisdom_box.insert(0, str(character_model.attributes['wisdom']))
-        self.charisma_box.delete(0, 'end')
-        self.charisma_box.insert(0, str(character_model.attributes['charisma']))
-
-        # Fill in the hitpoints
-        self.max_hp_text.delete(0, 'end')
-        self.max_hp_text.insert(0, str(character_model.hitpoints['max']))
-        self.current_hp_text.delete(0, 'end')
-        self.current_hp_text.insert(0, str(character_model.hitpoints['current']))
-
-        # Fill in the armor class, initiative
-        self.armour_class_text.delete(0, 'end')
-        self.armour_class_text.insert(0, str(character_model.armor_class))
-        self.initiative_text.delete(0, 'end')
-        self.initiative_text.insert(0, str(character_model.initiative))
-        self.speed_text.delete(0, 'end')
-        self.speed_text.insert(0, str(character_model.speed))
-
-        # Fill in the saving throws
-        self.st_strength_var.set(character_model.saving_throws['strength'])
-        self.st_dexterity_var.set(character_model.saving_throws['dexterity'])
-        self.st_constitution_var.set(character_model.saving_throws['constitution'])
-        self.st_intelligence_var.set(character_model.saving_throws['intelligence'])
-        self.st_wisdom_var.set(character_model.saving_throws['wisdom'])
-        self.st_charisma_var.set(character_model.saving_throws['charisma'])
-
-        # Fill in the hit dice
-        self.hit_dice_text.delete(0, 'end')
-        self.hit_dice_text.insert(0, character_model.hit_dice['total'])
-        self.hit_dice_total_text.delete(0, 'end')
-        self.hit_dice_total_text.insert(0, character_model.hit_dice['current'])
-
-        # Fill in the death saves
-        for i in range(3):
-            self.successes_checkboxes_value[i].set(character_model.death_saves['successes'][i])
-            self.failure_checkboxes_value[i].set(character_model.death_saves['failures'][i])
-
-        # Fill in the weapon attacks
-        for i, weapon in enumerate(character_model.weapon_attacks):
-            self.weapon_entries[i][0].delete(0, 'end')
-            self.weapon_entries[i][0].insert(0, weapon['name'])
-            self.weapon_entries[i][1].delete(0, 'end')
-            self.weapon_entries[i][1].insert(0, weapon['bonus_to_hit'])
-            self.weapon_entries[i][2].delete(0, 'end')
-            self.weapon_entries[i][2].insert(0, weapon['damage'])
-
-        # Fill in the abilities
-        self.abilities_box.delete('1.0', 'end')
-        self.abilities_box.insert('1.0', character_model.abilities)
-        
-        # Fill in the skills
-        self.acrobatics_var.set(character_model.skills['acrobatics'])
-        self.animal_handling_var.set(character_model.skills['animal_handling'])
-        self.arcana_var.set(character_model.skills['arcana'])
-        self.athletics_var.set(character_model.skills['athletics'])
-        self.deception_var.set(character_model.skills['deception'])
-        self.history_var.set(character_model.skills['history'])
-        self.insight_var.set(character_model.skills['insight'])
-        self.intimidation_var.set(character_model.skills['intimidation'])
-        self.investigation_var.set(character_model.skills['investigation'])
-        self.medicine_var.set(character_model.skills['medicine'])
-        self.nature_var.set(character_model.skills['nature'])
-        self.perception_var.set(character_model.skills['perception'])
-        self.performance_var.set(character_model.skills['performance'])
-        self.persuasion_var.set(character_model.skills['persuasion'])
-        self.religion_var.set(character_model.skills['religion'])
-        self.sleight_var.set(character_model.skills['sleight_of_hand'])
-        self.stealth_var.set(character_model.skills['stealth'])
-        self.survival_var.set(character_model.skills['survival'])
-
-        # Fill in the other proficiencies
-        self.proficiencies_box.delete('1.0', 'end')
-        self.proficiencies_box.insert('1.0', character_model.other_proficiencies)
-
-        # Fill in the inventory
-        self.inventory_box.delete('1.0', 'end')
-        self.inventory_box.insert('1.0', character_model.inventory)
 
     def import_character(self):
         try:
@@ -902,7 +722,7 @@ class Character:
                         print("Character Model Loaded")
 
                         # Fill in the GUI with the character model
-                        self.model_to_gui(self.character_model)
+                        convert_model_to_gui(self, self.character_model)
                         
         except jsonschema.exceptions.ValidationError as ve:
             messagebox.showerror("Error", "Invalid JSON File! Please import a valid character")
