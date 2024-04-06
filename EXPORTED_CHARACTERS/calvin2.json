@@ -1,0 +1,96 @@
+{
+    "character_name": "calvin2",
+    "character_class": "Barbarian",
+    "race": "Half-Orc",
+    "level": 2,
+    "attributes": {
+        "strength": 10,
+        "dexterity": 7,
+        "constitution": 11,
+        "intelligence": 14,
+        "wisdom": 14,
+        "charisma": 10
+    },
+    "hitpoints": {
+        "max": 5,
+        "current": 5
+    },
+    "armor_class": 1,
+    "initiative": 2,
+    "speed": 30,
+    "saving_throws": {
+        "strength": true,
+        "dexterity": false,
+        "constitution": true,
+        "intelligence": false,
+        "wisdom": true,
+        "charisma": false
+    },
+    "hit_dice": {
+        "total": "dice",
+        "current": "dicey"
+    },
+    "death_saves": {
+        "successes": [
+            true,
+            false,
+            false
+        ],
+        "failures": [
+            true,
+            true,
+            false
+        ]
+    },
+    "weapon_attacks": [
+        {
+            "name": "a",
+            "bonus_to_hit": "1",
+            "damage": "1"
+        },
+        {
+            "name": "b",
+            "bonus_to_hit": "2",
+            "damage": "2"
+        },
+        {
+            "name": "c",
+            "bonus_to_hit": "3",
+            "damage": "3"
+        },
+        {
+            "name": "d",
+            "bonus_to_hit": "4",
+            "damage": "4"
+        },
+        {
+            "name": "e",
+            "bonus_to_hit": "5",
+            "damage": "5"
+        }
+    ],
+    "abilities": "You can breathe air\n\n\n\n",
+    "skills": {
+        "acrobatics": false,
+        "animal_handling": true,
+        "arcana": false,
+        "athletics": true,
+        "deception": false,
+        "history": false,
+        "insight": true,
+        "intimidation": false,
+        "investigation": false,
+        "medicine": false,
+        "nature": false,
+        "perception": true,
+        "performance": false,
+        "persuasion": false,
+        "religion": true,
+        "sleight_of_hand": false,
+        "stealth": true,
+        "survival": false
+    },
+    "other_proficiencies": "Darkvision\nMenacing\nRelentless Endurance\nSavage Attacks\n\n\n\n",
+    "inventory": "Gold: 3 (Valorant)\nhamburgers: 2\n11 flies\n\n\n\n",
+    "spells": "abrakadabra\nfireball\nicewakll"
+}

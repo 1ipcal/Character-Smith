@@ -42,7 +42,33 @@
             false
         ]
     },
-    "weapon_attacks": [],
+    "weapon_attacks": [
+        {
+            "name": "",
+            "bonus_to_hit": "",
+            "damage": ""
+        },
+        {
+            "name": "",
+            "bonus_to_hit": "",
+            "damage": ""
+        },
+        {
+            "name": "",
+            "bonus_to_hit": "",
+            "damage": ""
+        },
+        {
+            "name": "",
+            "bonus_to_hit": "",
+            "damage": ""
+        },
+        {
+            "name": "",
+            "bonus_to_hit": "",
+            "damage": ""
+        }
+    ],
     "abilities": "",
     "skills": {
         "acrobatics": false,
