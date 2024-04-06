@@ -96,7 +96,7 @@ class Character:
 
         file_menu = Menu(menu_bar, tearoff=0)
         clear_menu = Menu(file_menu, tearoff=0)
-        clear_menu.add_command(label='Clear all', command=self.nothing)
+        clear_menu.add_command(label='Clear all', command=self.clear_all)
         file_menu.add_cascade(label='Clear', menu=clear_menu)
         file_menu.add_separator()
         file_menu.add_command(label='Import', command=self.import_character)
@@ -804,6 +804,24 @@ class Character:
                 "Error", "Invalid JSON File! Please import a valid character")
         except Exception as e:
             messagebox.showerror("An error occurred", str(e))
+
+    def clear_all(self):
+        """
+        this will import a blank character
+        """
+        filename = "./ASSETS/blank_character.json"
+
+        # Prompt the user to confirm that they want to clear the GUI
+        if not messagebox.askyesno("Clear Character", "Are you sure you want to clear the character sheet? Everything will be lost."):
+            print("GUI Not Cleared")
+            return
+        
+        with open(filename, 'r') as f:
+            json_str = f.read()
+            self.character_model = character.character_model.from_json(json_str)
+            convert_model_to_gui(self, self.character_model)
+
+        print("GUI Cleared")
 
 
 if __name__ == '__main__':
